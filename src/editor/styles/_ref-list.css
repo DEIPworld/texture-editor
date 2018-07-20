@@ -1,0 +1,59 @@
+.sc-ref-list {
+  margin: 60px 0px 40px;
+}
+
+.sc-ref-list.sm-hidden {
+  display: none;
+}
+
+.sc-ref-list > .se-title {
+  font-family: 'Avenir Next', 'Lato', Helvetica;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.sc-ref-list > .se-title > .se-empty-list {
+  color: #afafaf;
+  text-align: center;
+}
+
+.sc-ref-list > .se-ref-item {
+  display: flex;
+}
+
+.sc-ref-list > .se-ref-item > .sc-ref-component {
+  display: flex;
+  flex: 1 1 0;
+  margin-bottom: 15px;
+}
+
+.sc-ref-list > .se-ref-item > .sc-ref-component > .se-label {
+  min-width: 20px;
+  margin: 0px 20px;
+  font-weight: var(--strong-font-weight);
+  text-align: center;
+}
+
+.sc-ref-list > .se-ref-item > .sc-ref-component > .se-text {
+  margin-right: 10px;
+  flex: 1 1 0;
+}
+
+.sc-ref-list > .se-ref-item > .se-ref-actions {
+}
+
+.sc-ref-list > .se-ref-item > .se-ref-actions > .sc-button {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.sc-ref-list > .se-ref-list-options {
+  position: relative;
+}
+
+.sc-ref-list > .se-ref-list-options > .sc-button {
+  margin: 30px auto;
+}

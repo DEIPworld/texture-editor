@@ -1,0 +1,60 @@
+{
+  "name": "@deip/substance-texture",
+  "version": "1.0.0-preview.3-preview.2|3b3c77f372f7318932955c0aca7674286eb88b20",
+  "description": "A scientific word processor.",
+  "main": "./dist/texture.cjs.js",
+  "jsnext:main": "index.js",
+  "dependencies": {
+    "dar-server": "^0.4.1",
+    "katex": "^0.9.0",
+    "lodash": "^4.14.1"
+  },
+  "peerDependency": {
+    "substance": "^1.0.0-preview.66"
+  },
+  "devDependencies": {
+    "dar-server": "^0.4.1",
+    "electron": "2.0.1",
+    "electron-builder": "20.13.4",
+    "eslint": "^4.19.1",
+    "esm": "3.0.47",
+    "font-awesome": "4.5.0",
+    "nyc": "11.8.0",
+    "source-map-support": "0.5.3",
+    "substance": "1.0.0-preview.67",
+    "substance-bundler": "0.25.4",
+    "substance-test": "0.12.2",
+    "tap-spec": "^4.1.1"
+  },
+  "scripts": {
+    "prepack": "npm install && node make publish",
+    "start": "node make web -s -w -d data",
+    "app": "node make run-app -w",
+    "release": "node make app && build --project app-dist",
+    "pretest": "npm run lint",
+    "test": "node make test-nodejs && node --require esm test | tap-spec",
+    "cover": "nyc --require esm --reporter=lcov --reporter=text node test",
+    "lint": "eslint -c .eslintrc.js src index.es.js"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/DEIP/texture.git"
+  },
+  "license": "MIT",
+  "files": [
+    "src",
+    "dist",
+    "index.es.js",
+    "*.md",
+    "package.json",
+    "*.css"
+  ],
+  "publishConfig": {
+    "tag": "next"
+  }
+}

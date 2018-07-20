@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.1d3 20150301//EN"  "JATS-archivearticle1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink">
+  <back>
+    <ref-list>
+      <title>References</title>
+      <ref id="r1">
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Doe</surname>
+              <given-names>John</given-names>
+            </name>
+            <name>
+              <surname>Doe</surname>
+              <given-names>Jane</given-names>
+              <prefix>Dr</prefix>
+              <suffix>Jr</suffix>
+            </name>
+          </person-group>
+          <person-group person-group-type="editor">
+            <name>
+              <surname>Smith</surname>
+              <given-names>Jane</given-names>
+            </name>
+          </person-group>
+          <year iso-8601-date="2009">2009</year>
+          <article-title>Journal article title</article-title>
+          <source>Journal article source</source>
+          <volume>29</volume>
+          <fpage>6436</fpage>
+          <lpage>6448</lpage>
+          <page-range>6436-6448</page-range>
+          <elocation-id>ELOCID</elocation-id>
+          <pub-id pub-id-type="doi">10.1523/JNEUROSCI.5479-08.2009</pub-id>
+        </element-citation>
+      </ref>
+      <ref id="r2">
+        <element-citation publication-type="book">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Doe</surname>
+              <given-names>John</given-names>
+            </name>
+          </person-group>
+          <person-group person-group-type="editor">
+            <name>
+              <surname>Smith</surname>
+              <given-names>Jane</given-names>
+            </name>
+          </person-group>
+          <chapter-title>Tobacco use</chapter-title>
+          <source>Clinical methods: the history, physical, and laboratory examinations</source>
+          <publisher-loc>Stoneham (MA)</publisher-loc>
+          <publisher-name>Butterworth Publishers</publisher-name>
+          <year>1990</year>
+          <month>10</month>
+          <day>5</day>
+          <fpage>214</fpage>
+          <lpage>216</lpage>
+          <page-range>214-216</page-range>
+          <elocation-id>ELOCID</elocation-id>
+        </element-citation>
+      </ref>
+    </ref-list>
+  </back>
+</article>
