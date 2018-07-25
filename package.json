@@ -1,6 +1,6 @@
 {
   "name": "@deip/substance-texture",
-  "version": "1.0.0-preview.3-preview.2.commit-3b3c77f372f7318932955c0aca7674286eb88b20",
+  "version": "1.0.0-preview.3-preview.2.3b3c77f372f7318932955c0aca7674286eb88b20.patch-1",
   "description": "A scientific word processor.",
   "main": "./dist/texture.cjs.js",
   "jsnext:main": "index.js",

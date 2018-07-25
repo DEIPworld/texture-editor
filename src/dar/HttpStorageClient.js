@@ -2,8 +2,9 @@ import { sendRequest, forEach } from 'substance'
 
 export default class HttpStorageClient {
 
-  constructor(apiUrl) {
+  constructor(apiUrl, defaultHeaders) {
     this.apiUrl = apiUrl
+    this.headers = defaultHeaders
   }
 
   /*
@@ -11,12 +12,14 @@ export default class HttpStorageClient {
   */
   read(archiveId) {
     let url = this.apiUrl
+    let header = this.headers
     if (archiveId) {
       url = url + '/' + archiveId
     }
     return sendRequest({
       method: 'GET',
-      url
+      url,
+      header
     }).then(response => {
       return JSON.parse(response)
     })
@@ -33,12 +36,14 @@ export default class HttpStorageClient {
     })
     form.append('_archive', JSON.stringify(data))
     let url = this.apiUrl
+    let header = this.headers
     if (archiveId) {
       url = url + '/' + archiveId
     }
     return sendRequest({
       method: 'PUT',
       url,
+      header,
       data: form
     })
   }
