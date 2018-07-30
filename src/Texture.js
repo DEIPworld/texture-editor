@@ -18,7 +18,8 @@ export default class Texture extends Component {
     this.api = new TextureArticleAPI(
       this.manuscriptSession,
       this.pubMetaDbSession,
-      this.configurator.getModelRegistry()
+      this.configurator.getModelRegistry(),
+      archive
     )
 
     // HACK: we need to expose referenceManager somehow, so it can be used in

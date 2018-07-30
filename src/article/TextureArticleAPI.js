@@ -13,7 +13,7 @@ import TableManager from '../editor/util/TableManager'
 import FootnoteManager from '../editor/util/FootnoteManager'
 
 export default class TextureArticleAPI {
-  constructor (editorSession, pubMetaDbSession, modelRegistry) {
+  constructor (editorSession, pubMetaDbSession, modelRegistry, archive) {
     this.modelRegistry = modelRegistry
     this.editorSession = editorSession
     this.pubMetaDbSession = pubMetaDbSession
@@ -52,7 +52,8 @@ export default class TextureArticleAPI {
       footnoteManager: this.footnoteManager,
       get pubMetaDb () { return pubMetaDbSession.getDocument() },
       get doc () { return editorSession.getDocument() },
-      get surfaceManager () { return editorSession.surfaceManager }
+      get surfaceManager () { return editorSession.surfaceManager },
+      archive
     }
 
     // workaround for an ownership problem, because EditorSession

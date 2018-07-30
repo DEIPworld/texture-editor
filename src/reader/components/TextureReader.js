@@ -13,7 +13,8 @@ export default class TextureReader extends Component {
     this.api = new TextureArticleAPI(
       this.manuscriptSession,
       this.pubMetaDbSession,
-      this.configurator.getModelRegistry()
+      this.configurator.getModelRegistry(),
+      archive
     )
   }
 
