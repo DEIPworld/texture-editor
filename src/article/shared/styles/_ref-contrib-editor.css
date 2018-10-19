@@ -1,0 +1,23 @@
+.sc-inplace-ref-contrib-editor {
+  font-size: var(--input-font-size);
+  line-height: var(--input-line-height);
+}
+
+.sc-inplace-ref-contrib-editor > .sc-form-row {
+  width: 100%;
+}
+
+.sc-inplace-ref-contrib-editor > .sc-form-row > .se-editor {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sc-inplace-ref-contrib-editor > .sc-form-row > .se-editor > * {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.sc-inplace-ref-contrib-editor > .sc-form-row > .se-editor > .se-remove-value {
+  width: 10px;
+}

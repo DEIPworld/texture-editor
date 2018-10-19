@@ -1,0 +1,39 @@
+.sc-form-row {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+}
+
+.sc-form-row > .se-label {
+  cursor: default;
+  display: block;
+  flex: 1 0 200px;
+  font-size: var(--t-tiny-font-size);
+  color: var(--t-light-text-color);
+}
+
+.sc-form-row > .se-label::after {
+  content: ':'
+}
+
+.sc-form-row > .se-editor {
+  width: 100%;
+}
+
+.sc-form-row.sm-warning > .se-label > .se-warning {
+  position: absolute;
+  top: 2px;
+  left: 175px;
+}
+
+.sc-form-row.sm-warning > .se-label > .se-warning > .se-icon {
+  color: var(--t-warning-color);
+}
+
+.sc-form-row.sm-warning > .se-label > .se-warning > .sc-tooltip {
+  display: none;
+}
+
+.sc-form-row.sm-warning > .se-label > .se-warning:hover > .sc-tooltip {
+  display: block;
+}

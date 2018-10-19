@@ -1,0 +1,54 @@
+.sc-article-panel {
+  display: flex;
+  flex-flow: row nowrap;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+
+.sc-article-panel .se-nav-bar {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 100%;
+  border-right: 1px solid #b5b5b5;
+  z-index: 99;
+}
+
+.sc-article-panel .se-nav-bar > .sc-toolbar > .se-active-tools .sc-tool-group {
+  display: block;
+}
+
+.sc-article-panel .sc-manuscript-view {
+  flex-grow: 1;
+}
+
+.sc-article-panel .sc-toolbar .se-active-tools {
+  position: relative;
+}
+
+.sc-article-panel .sc-toolbar .se-active-tools .sm-mode {
+  position: absolute;
+  right: 0px;
+  background: #f0f0f0;
+  border-radius: 2px;
+}
+
+.sc-article-panel .sc-toolbar .se-active-tools .sm-mode .se-label {
+  margin: 0px 5px 0px 15px;
+}
+
+.sc-article-panel .sc-toolbar .se-active-tools .sm-mode .sc-button.sm-theme-light:hover:not(.sm-active):not([disabled]),
+.sc-article-panel .sc-toolbar .se-active-tools .sm-mode .sc-button.sm-theme-light.sm-active {
+  background: inherit;
+  color: inherit;
+}
+
+.sc-article-panel .sc-toolbar .sc-menu-item .se-keyboard-shortcut {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.sc-article-panel > .sm-compact .sc-find-and-replace-dialog {
+  margin: 0 auto;
+}

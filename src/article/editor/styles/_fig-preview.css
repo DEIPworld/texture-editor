@@ -1,0 +1,30 @@
+.sc-fig-preview {
+  font-size: 12px;
+  border-bottom: 1px solid var(--t-separator-color);
+  padding: 5px 10px;
+  cursor: pointer;
+  position: relative;
+  line-height: 1.5em;
+  border-left: 3px solid transparent;
+}
+
+.sc-fig-preview .se-thumbnail {
+  display: table-cell;
+  width: 70px;
+}
+.sc-fig-preview .se-label {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  padding-left: 10px;
+}
+
+.sc-fig-preview.sm-selected {
+  border-left: 3px solid var(--t-focus-color);
+  color: var(--t-text-color);
+  background: var(--t-light-background-color);
+}
+
+.sc-fig-preview a {
+  text-decoration: none;
+}

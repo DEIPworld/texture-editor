@@ -1,7 +1,6 @@
-import { JATSImportDialog } from './article/index'
-import TextureArchive from './TextureArchive'
 import Texture from './Texture'
-import EditorPackage from './editor/EditorPackage'
+import TextureArchive from './TextureArchive'
+import { JATSImportDialog } from './article'
 
 export default function TextureAppMixin (ParentAppChrome) {
   return class TextureApp extends ParentAppChrome {
@@ -11,12 +10,12 @@ export default function TextureAppMixin (ParentAppChrome) {
       if (archive) {
         const Texture = this._getAppClass()
         el.append(
-          $$(Texture, { archive })
+          $$(Texture, { archive }).ref('texture')
         )
       } else if (error) {
         if (error.type === 'jats-import-error') {
           el.append(
-            $$(JATSImportDialog, { errors: error.detail })
+            $$(JATSImportDialog, { errors: error.detail._errors })
           )
         } else {
           el.append('ERROR:', error.message)
@@ -33,10 +32,6 @@ export default function TextureAppMixin (ParentAppChrome) {
 
     _getArchiveClass () {
       return TextureArchive
-    }
-
-    _getArticleConfig () {
-      return EditorPackage
     }
   }
 }

@@ -1,0 +1,9 @@
+.sc-context-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-context-section > .se-context-content {
+  flex: 1 1 0;
+  overflow: auto;
+}

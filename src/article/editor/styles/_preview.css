@@ -1,0 +1,19 @@
+.sc-preview {
+  display: flex;
+  font-size: var(--t-tiny-font-size);
+}
+
+.sc-preview .se-thumbnail {
+  max-width: 60px;
+}
+
+.sc-preview .se-label {
+  white-space: nowrap;
+  flex: 0 0 var(--t-double-spacing);
+  padding-left: var(--t-half-spacing);
+}
+
+.sc-preview a {
+  text-decoration: none;
+  color: var(--t-text-color);
+}

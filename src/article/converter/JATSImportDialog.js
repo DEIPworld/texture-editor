@@ -2,27 +2,22 @@ import { Component } from 'substance'
 import { printElement } from './util/domHelpers'
 
 export default class JATSImportDialog extends Component {
-
-  render($$) {
+  render ($$) {
     const errors = this.props.errors
     let el = $$('div').addClass('sc-jats-import-dialog')
     el.append($$('h1').addClass('se-title').text('Importing JATS'))
-
-    Object.keys(errors).forEach((stageName) => {
+    errors.forEach((error) => {
       el.append($$(ImportStage, {
-        stage: stageName,
-        errors: errors[stageName]
+        stage: error.name,
+        errors: error.errors
       }))
     })
-
     return el
   }
-
 }
 
 class ImportStage extends Component {
-
-  render($$) {
+  render ($$) {
     const errors = this.props.errors
     let el = $$('div').addClass('sc-import-stage')
     el.append($$('h2').addClass('se-title').text(_getTitle(this.props.stage)))
@@ -37,7 +32,7 @@ class ImportStage extends Component {
     return el
   }
 
-  _renderError($$, err) {
+  _renderError ($$, err) {
     let el = $$('div').addClass('se-error')
     // TODO: maybe we will have more structured errors
     el.append(
@@ -45,7 +40,7 @@ class ImportStage extends Component {
     )
     if (err.el) {
       el.append(
-        $$('pre').addClass('se-element').text(printElement(err.el, { maxLevel: 1}))
+        $$('pre').addClass('se-element').text(printElement(err.el, {maxLevel: 1}))
       )
     }
     return el
@@ -55,12 +50,11 @@ class ImportStage extends Component {
 const TITLES = {
   'parse': 'Parse XML',
   'validate-jats': 'Validate JATS',
-  'validate-dar-article': 'Validate Dar Article',
   'validate-texture-article': 'Validate Texture Article',
   'j2r': 'Transform JATS -> TextureArticle',
   'r2t': 'Transform TextureArticle -> InternalArticle'
 }
 
-function _getTitle(stage) {
+function _getTitle (stage) {
   return TITLES[stage]
 }

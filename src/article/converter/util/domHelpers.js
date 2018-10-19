@@ -1,13 +1,49 @@
 import { DomUtils } from 'substance'
 
-export function replaceWith(el, els) {
+export function getText (rootEl, selector) {
+  let el = rootEl.find(selector)
+  if (el) {
+    return el.textContent
+  } else {
+    return ''
+  }
+}
+
+export function getSeparatedText (rootEl, selector) {
+  let el = rootEl.findAll(selector)
+  if (el) {
+    return el.map(m => { return m.textContent }).join('; ')
+  } else {
+    return ''
+  }
+}
+
+export function getHTML (rootEl, selector) {
+  let el = rootEl.find(selector)
+  if (el) {
+    return el.innerHTML
+  } else {
+    return ''
+  }
+}
+
+export function getAttr (rootEl, selector, attr) {
+  let el = rootEl.find(selector)
+  if (el) {
+    return el.attr(attr)
+  } else {
+    return ''
+  }
+}
+
+export function replaceWith (el, els) {
   const parent = el.parentNode
   const next = el.nextSibling
   els.forEach(_el => parent.insertBefore(_el, next))
   el.remove()
 }
 
-export function unwrapChildren(el) {
+export function unwrapChildren (el) {
   let parent = el.parentNode
   let children = el.children
   let L = children.length
@@ -17,7 +53,7 @@ export function unwrapChildren(el) {
   parent.removeChild(el)
 }
 
-export function findChild(el, cssSelector) {
+export function findChild (el, cssSelector) {
   const children = el.getChildren()
   for (let i = 0; i < children.length; i++) {
     const child = children[i]
@@ -25,7 +61,7 @@ export function findChild(el, cssSelector) {
   }
 }
 
-export function findAllChilds(el, cssSelector) {
+export function findAllChildren (el, cssSelector) {
   const children = el.getChildren()
   let result = []
   for (let i = 0; i < children.length; i++) {
@@ -37,8 +73,7 @@ export function findAllChilds(el, cssSelector) {
   return result
 }
 
-
-export function isMixed(el) {
+export function isMixed (el) {
   let childNodes = el.childNodes
   const L = childNodes.length
   for (var i = 0; i < L; i++) {
@@ -50,14 +85,14 @@ export function isMixed(el) {
   return false
 }
 
-export function printElement(el, options = {}) {
+export function printElement (el, options = {}) {
   let maxLevel = options.maxLevel || 1000
   let res = _printElement(el, 1, maxLevel)
   return res
 }
 
-function _printElement(el, level, maxLevel) {
-  let INDENT = new Array(level-1)
+function _printElement (el, level, maxLevel) {
+  let INDENT = new Array(level - 1)
   INDENT.fill('  ')
   INDENT = INDENT.join('')
 
@@ -67,13 +102,13 @@ function _printElement(el, level, maxLevel) {
       res.push(INDENT + _openTag(el))
       res = res.concat(
         el.childNodes.map((child) => {
-          return _printElement(child, level+1, maxLevel)
+          return _printElement(child, level + 1, maxLevel)
         }).filter(Boolean)
       )
       res.push(INDENT + _closeTag(el))
       return res.join('\n')
     } else {
-      return INDENT + _openTag(el)+'...'+_closeTag(el)
+      return INDENT + _openTag(el) + '...' + _closeTag(el)
     }
   } else if (el.isTextNode()) {
     let textContent = el.textContent
@@ -88,7 +123,7 @@ function _printElement(el, level, maxLevel) {
   }
 }
 
-function _openTag(el) {
+function _openTag (el) {
   let attribStr = DomUtils.formatAttribs(el)
   if (attribStr) {
     return `<${el.tagName} ${attribStr}>`
@@ -97,6 +132,6 @@ function _openTag(el) {
   }
 }
 
-function _closeTag(el) {
+function _closeTag (el) {
   return `</${el.tagName}>`
 }

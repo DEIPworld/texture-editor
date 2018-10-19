@@ -18,26 +18,24 @@ Feature                                 | Ready
 General editing                         | Beta
 Copy & Paste (from Word, etc.)          | Beta
 Find and Replace                        | Beta
-Auto-numbered labels (`xref`, `fig`, etc. ) | Beta
-Reference editing (`element-citation`)  | Beta
-Authors and Affiliations                | Beta
-[Dar](https://github.com/substance/dar) Storage | Beta
-Article Record (`issue`, `fpage`, etc.) | September 2018
-Translations                            | September 2018
-Track Changes                           | September 2018
-PubMed and CrossRef verification of references                           | September 2018
-Fundref verification                    | September 2018
-Group authors                           | September 2018
+Auto-numbered labels (`xref`, `fig`, etc. ) | ✓
+Reference editing (`element-citation`)  | ✓
+Authors and Affiliations                | ✓
+[Dar](https://github.com/substance/dar) Storage | ✓
+Article Record (`issue`, `fpage`, etc.) | ✓
+Translations                            | ✓
+Group authors                           | ✓
 Realtime Collaborative Editing          |
 **Supported Content**                   |
 Paragraph                               | ✓
 Heading                                 | ✓
 Inline Formula                          | ✓
-Display Formula                         | September 2018
+Display Formula                         | 2.0
+Definition List                         | 2.0
 List                                    | ✓
 Blockquote                              | ✓
 Figure                                  | ✓
-Table                                   | Beta
+Table                                   | ✓
 Bold & Italic                           | ✓
 Ext-Link                                | ✓
 Subscript & Superscript                 | ✓
@@ -91,6 +89,36 @@ To package the application for distribution do the following:
 $ npm run release
 ```
 
+## Running tests
+
+Running tests in NodeJS (like it is done on TravisCI):
+
+```bash
+npm test
+```
+
+Debugging NodeJS tests:
+
+```
+node make test-nodejs && node --inspect-brk --require esm test/index.js
+```
+Then open `chrome://inspect`. It should show a `Remove Target` for the test script. Clicking on `inspect` opens a new window with Chrome Developer Tools.
+
+Running a some NodeJS tests:
+
+```
+TEST="Model" npm test
+```
+
+The environment variable `TEST` is used as a filter to select test that have that pattern in their name.
+
+
+Running tests in the browser:
+```
+node make test-browser -w -s
+```
+Then open `localhost:4000/test`.
+
 ## License
 
 Texture is open source (MIT license), and you are legally free to use it commercially. If you are using Texture to make profit, we expect that you help [fund its development and maintenance](http://substance.io/consortium/).
@@ -104,11 +132,7 @@ The following people make Texture possible (in random order):
 - Alex Garnett (leadership, concept)
 - Juan Pablo Alperin (leadership, concept)
 - Alex Smecher (concept, dev)
-- Kristen Ratan (leadership)
-- Adam Hyde (leadership)
-- Jure Triglav (concept, dev)
 - Tanja Niemann (leadership)
-- Michael Aufreiter (dev)
 - Melissa Harrison (requirements)
 - Giuliano Maciocci (requirements, concept)
 - Naomi Penfold (leadership)
@@ -118,4 +142,8 @@ The following people make Texture possible (in random order):
 - Sophy Ouch (design)
 - Philipp Zumstein (dev)
 - Fabio Batalha Cunha dos Santos (leadership, concept)
+- James Gilbert (UX, requirements)
+- Luciano Gabriel Panepucci (UX)
+- Michael Aufreiter (dev)
 - Oliver Buchtala (dev)
+- Daniel Beilinson (dev)

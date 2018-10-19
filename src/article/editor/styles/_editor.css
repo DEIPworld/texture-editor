@@ -1,0 +1,16 @@
+.sc-manuscript-editor .sc-container-editor .sc-isolated-node {
+  margin: 30px 0;
+}
+
+.sc-manuscript-editor .sc-isolated-node.sm-default-style.sm-selected {
+  outline: var(--t-input-focus-border);
+}
+
+.sc-manuscript-editor .sc-container-editor .sc-isolated-node.sm-focused,
+.sc-manuscript-editor .sc-container-editor .sc-isolated-node.sm-co-focused {
+  outline: none;
+}
+
+.sc-manuscript-editor > .se-main-section > .sc-workflow-pane {
+  flex: 0 0 0;
+}

@@ -1,11 +1,12 @@
-import { EditorSession, keys } from 'substance'
+import { keys } from 'substance'
+import { test } from 'substance-test'
 import {
-  TableComponent, TextureDocument, TextureConfigurator, tableHelpers,
-  EditorPackage, TableEditing
+  TableComponent, tableHelpers, TableEditing
 } from '../index'
-import { testAsync, getMountPoint } from './testHelpers'
+import { getMountPoint, DOMEvent } from './shared/testHelpers'
+import setupTestArticleSession from './shared/setupTestArticleSession'
 
-testAsync('TableComponent: mounting a table component', async (t) => {
+test('TableComponent: mounting a table component', t => {
   let { table, context } = _setup(t)
   let el = getMountPoint(t)
   let comp = new TableComponent(null, { node: table }, { context })
@@ -14,7 +15,7 @@ testAsync('TableComponent: mounting a table component', async (t) => {
   t.end()
 })
 
-testAsync('TableComponent: setting table selections', async (t) => {
+test('TableComponent: setting table selections', t => {
   let { editorSession, table, context } = _setup(t)
   let el = getMountPoint(t)
   let comp = new TableComponent(null, { node: table }, { context })
@@ -49,7 +50,7 @@ testAsync('TableComponent: setting table selections', async (t) => {
   t.end()
 })
 
-testAsync('TableComponent: mouse interactions', async (t) => {
+test('TableComponent: mouse interactions', t => {
   let { editorSession, table, context } = _setup(t)
   let el = getMountPoint(t)
   let comp = new TableComponent(null, { node: table }, { context })
@@ -62,14 +63,18 @@ testAsync('TableComponent: mouse interactions', async (t) => {
 
   // simulate a mouse down on the first cell
   comp._onMousedown(new DOMEvent({ target: firstCellComp.el }))
+  comp._onMouseup(new DOMEvent({ target: firstCellComp.el }))
+
   let sel = editorSession.getSelection()
-  t.equal(sel.customType, 'table', 'The table should be selected,')
+  t.ok(true, 'After a click on the firstCell')
+  t.equal(sel.customType, 'table', '... the table should be selected,')
   t.equal(sel.data.anchorCellId, firstCell.id, '.. with anchor on first cell,')
   t.equal(sel.data.focusCellId, firstCell.id, '.. and focus on first cell,')
 
   // simulate a right mouse down on the second cell
   comp._onMousedown(new DOMEvent({ target: secondCellComp.el, which: 3 }))
   sel = editorSession.getSelection()
+  t.ok(true, 'After a right-click on the secondCell')
   t.equal(sel.customType, 'table', 'The table should be selected,')
   t.equal(sel.data.anchorCellId, secondCell.id, '.. with anchor on second cell,')
   t.equal(sel.data.focusCellId, secondCell.id, '.. and focus on second cell,')
@@ -77,7 +82,7 @@ testAsync('TableComponent: mouse interactions', async (t) => {
   t.end()
 })
 
-testAsync('TableComponent: keyboard interactions', async (t) => {
+test('TableComponent: keyboard interactions', t => {
   let { editorSession, table, context } = _setup(t)
   let el = getMountPoint(t)
   let comp = new TableComponent(null, { node: table }, { context })
@@ -124,56 +129,17 @@ testAsync('TableComponent: keyboard interactions', async (t) => {
 })
 
 function _setup (t) {
-  let configurator = new TextureConfigurator()
-  configurator.import(EditorPackage)
-  let doc = _createEmptyTextureArticle(configurator)
-  let table = tableHelpers.generateTable(doc, 10, 5)
-  doc.find('body').append(table)
-  // TODO: look closely here: this is the footprint of how context
-  // is used by TableComponent and children
-  let editorSession = new EditorSession(doc, { configurator })
-  let componentRegistry = configurator.getComponentRegistry()
-  let commandGroups = configurator.getCommandGroups()
-  let iconProvider = configurator.getIconProvider()
-  let labelProvider = configurator.getLabelProvider()
-  let keyboardShortcuts = configurator.getKeyboardShortcuts()
-  let tools = configurator.getTools()
-  let context = {
-    editorSession,
-    configurator,
-    componentRegistry,
-    commandGroups,
-    tools,
-    iconProvider,
-    labelProvider,
-    keyboardShortcuts
+  let table
+  let res = setupTestArticleSession({
+    seed: doc => {
+      table = tableHelpers.generateTable(doc, 10, 5, 't')
+      doc.find('body').append(table)
+    }
+  })
+  return {
+    context: res.context,
+    editorSession: res.editorSession,
+    doc: res.doc,
+    table
   }
-  return { context, editorSession, doc, table }
-}
-
-function _createEmptyTextureArticle (configurator) {
-  let doc = new TextureDocument(configurator.getSchema())
-  doc.$$ = doc.createElement.bind(doc)
-  const $$ = doc.$$
-  $$('article', { id: 'article' }).append(
-    $$('front').append(
-      $$('article-meta').append(
-        $$('title-group').append(
-          $$('article-title')
-        ),
-        $$('abstract')
-      )
-    ),
-    $$('body'),
-    $$('back')
-  )
-  return doc
-}
-
-class DOMEvent {
-  constructor (props) {
-    Object.assign(this, props)
-  }
-  stopPropagation () {}
-  preventDefault () {}
 }

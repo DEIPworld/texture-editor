@@ -1,34 +1,32 @@
 import ManifestLoader from './ManifestLoader'
 
 export default class VfsStorageClient {
-
-  constructor(vfs, baseUrl) {
+  constructor (vfs, baseUrl) {
     this.vfs = vfs
 
     // an url rom where the assets are served statically
     this.baseUrl = baseUrl
   }
 
-  read(archiveId) {
+  read (archiveId, cb) {
     let rawArchive = _readRawArchive(this.vfs, archiveId, this.baseUrl)
-    return Promise.resolve(rawArchive)
+    cb(null, rawArchive)
   }
 
-  write(archiveId, data) { // eslint-disable-line
-    console.error('Can not write on virtual file system')
-    console.info('This would have been written:', data)
-    return Promise.resolve(false)
+  write (archiveId, data, cb) { // eslint-disable-line
+    _updateRawArchive(this.vfs, archiveId, data, this.baseUrl)
+    cb(null, true)
   }
 }
 
-function _readRawArchive(fs, archiveId, baseUrl = '') {
+function _readRawArchive (fs, archiveId, baseUrl = '') {
   let manifestXML = fs.readFileSync(`${archiveId}/manifest.xml`)
   let manifestSession = ManifestLoader.load(manifestXML)
   let manifest = manifestSession.getDocument()
   let docs = manifest.findAll('documents > document')
   let assets = manifest.findAll('assets > asset')
   let rawArchive = {
-    version: "0",
+    version: '0',
     resources: {
       'manifest.xml': {
         encoding: 'utf8',
@@ -54,8 +52,17 @@ function _readRawArchive(fs, archiveId, baseUrl = '') {
     // TODO: we could store other stats and maybe mime-types in VFS
     rawArchive.resources[path] = {
       encoding: 'url',
-      data: baseUrl+archiveId+'/'+path
+      data: baseUrl + archiveId + '/' + path
     }
   })
   return rawArchive
+}
+
+function _updateRawArchive (fs, archiveId, rawArchive, baseUrl = '') {
+  let paths = Object.keys(rawArchive.resources)
+  for (let path of paths) {
+    let resource = rawArchive.resources[path]
+    let data = resource.data
+    fs.writeFileSync(`${archiveId}/${path}`, data)
+  }
 }

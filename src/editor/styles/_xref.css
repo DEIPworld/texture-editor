@@ -1,9 +1,0 @@
-.sc-xref {
-  color: var(--text-action-color);
-  white-space: nowrap;
-}
-
-.sc-xref.sm-fn {
-  vertical-align: super;
-  font-size: smaller;
-}
