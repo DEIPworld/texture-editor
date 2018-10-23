@@ -100,7 +100,9 @@ export default class ArticlePanel extends Component {
 
   _createAppState (config) { // eslint-disable-line no-unused-vars
     const appState = new AppState({
-      viewName: DEFAULT_VIEW
+      viewName: this.parent && this.parent.props && this.parent.props.viewName 
+        ? this.parent.props.viewName 
+        : DEFAULT_VIEW
     })
     appState.addObserver(['view'], this.rerender, this, { stage: 'render' })
     return appState
@@ -116,7 +118,11 @@ export default class ArticlePanel extends Component {
   _handleKeydown (e) {
     // console.log('ArticlePanel._handleKeydown', e)
     // ATTENTION: asking the currently active content to handle the keydown event first
-    let handled = this.refs.content._onKeydown(e)
+    var handled;
+    try {
+      handled = this.refs.content._onKeydown(e)
+    } catch(err) {}
+
     // Note: if we had a keyboardManager here we could ask it to handle the event
     // if (!handled) {
     //   handled = this.context.keyboardManager.onKeydown(e, this.context)

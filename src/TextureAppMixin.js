@@ -7,10 +7,11 @@ export default function TextureAppMixin (ParentAppChrome) {
     render ($$) {
       let el = $$('div').addClass('sc-app')
       let { archive, error } = this.state
+      let { viewName } = this.props
       if (archive) {
         const Texture = this._getAppClass()
         el.append(
-          $$(Texture, { archive }).ref('texture')
+          $$(Texture, { archive, viewName }).ref('texture')
         )
       } else if (error) {
         if (error.type === 'jats-import-error') {
