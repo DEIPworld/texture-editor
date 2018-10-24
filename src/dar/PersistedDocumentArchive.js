@@ -1,5 +1,6 @@
 import { forEach, last, uuid, EventEmitter, platform, isString } from 'substance'
 import ManifestLoader from './ManifestLoader'
+import { JATSImporter } from './../article/converter/JATSImporter'
 
 /*
   A PersistedDocumentArchive is a 3-tier stack representing a document archive
@@ -231,6 +232,9 @@ export default class PersistedDocumentArchive extends EventEmitter {
 
     let rawArchive = this._exportChanges(sessions, buffer)
 
+    let validation = new JATSImporter().import(rawArchive.resources['manuscript.xml'].data)
+    if (validation.hasErrored) return cb(validation.errors)
+    
     // CHALLENGE: we either need to lock the buffer, so that
     // new changes are interfering with ongoing sync
     // or we need something pretty smart caching changes until the
