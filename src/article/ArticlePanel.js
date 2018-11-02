@@ -70,6 +70,7 @@ export default class ArticlePanel extends Component {
     const articleSession = props.documentSession
     const config = props.config.getConfiguration(viewName)
     const viewport = this._viewports[viewName]
+    const deip = this.state.deip;
 
     let ContentComponent
     switch (viewName) {
@@ -94,15 +95,18 @@ export default class ArticlePanel extends Component {
       api,
       archive,
       config,
-      articleSession
+      articleSession,
+      deip
     }).ref('content')
   }
 
   _createAppState (config) { // eslint-disable-line no-unused-vars
+    const deip = this.parent && this.parent.props && this.parent.props.deip ? this.parent.props.deip : {};
     const appState = new AppState({
       viewName: this.parent && this.parent.props && this.parent.props.viewName 
         ? this.parent.props.viewName 
-        : DEFAULT_VIEW
+        : DEFAULT_VIEW,
+      deip
     })
     appState.addObserver(['view'], this.rerender, this, { stage: 'render' })
     return appState

@@ -3,7 +3,6 @@ import { includes, EventEmitter } from 'substance'
 export default class TOCProvider extends EventEmitter {
   constructor (articleSession, config) {
     super()
-
     this.articleSession = articleSession
     this.config = config
 

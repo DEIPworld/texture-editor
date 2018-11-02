@@ -150,7 +150,8 @@ export default class MetadataEditor extends EditorPanel {
 
   _showHideTOC () {
     let contentSectionWidth = this.refs.contentSection.el.width
-    if (contentSectionWidth < 960) {
+    let threshold = this.props.deip ? this.props.deip.tocThreshold : 960;
+    if (contentSectionWidth < threshold) {
       this.el.addClass('sm-compact')
     } else {
       this.el.removeClass('sm-compact')

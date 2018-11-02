@@ -185,7 +185,8 @@ export default class ArticleReader extends Component {
 
   _showHideTOC () {
     let contentSectionWidth = this.refs.contentSection.el.width
-    if (!this._isTOCVisible() || contentSectionWidth < 960) {
+    let threshold = this.props.deip ? this.props.deip.tocThreshold : 960;
+    if (!this._isTOCVisible() || contentSectionWidth < threshold) {
       this.el.addClass('sm-compact')
     } else {
       this.el.removeClass('sm-compact')
