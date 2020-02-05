@@ -2,7 +2,7 @@
 import { sendRequest, forEach } from 'substance'
 
 export default class HttpStorageClient {
-  constructor (apiUrl) {
+  constructor(apiUrl, defaultHeaders) {
     this.apiUrl = apiUrl
     this.headers = defaultHeaders;
   }
