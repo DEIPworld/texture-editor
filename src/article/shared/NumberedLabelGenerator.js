@@ -38,13 +38,19 @@ export default class NumberedLabelGenerator {
     this.invalid = config.invalid || '???'
   }
 
+  // TODO: consolidate label generator interface
   getLabel (numbers) {
     if (!numbers) return this.invalid
     if (!isArray(numbers)) numbers = [numbers]
+    return this.getCombinedLabel(numbers)
+  }
+
+  getCombinedLabel (numbers) {
     if (numbers.length === 0) return this.invalid
 
     const L = numbers.length
-    numbers.sort()
+    // ATTENTION: Array.sort() is sorting lexically!
+    numbers.sort((a, b) => a - b)
 
     let frags = []
     if (this.name) {
@@ -73,7 +79,7 @@ export default class NumberedLabelGenerator {
         str = String(g[0]) + this.to + String(last(g))
       }
       if (this.groupTemplate) {
-        str = this.groupTemplate.slice(0).replace('$', str)
+        str = this.groupTemplate.slice(0).replace(/[$]/g, str)
       }
       groups.push(str)
     }
@@ -96,7 +102,7 @@ export default class NumberedLabelGenerator {
 
     let res = frags.join('')
     if (this.template) {
-      res = this.template.slice(0).replace('$', res)
+      res = this.template.slice(0).replace(/[$]/g, res)
     }
     return res
   }

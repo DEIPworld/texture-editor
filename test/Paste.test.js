@@ -19,7 +19,7 @@ import { openManuscriptEditor, getDocument, getApi, setCursor, loadBodyFixture }
     => wrap into default text type with filtering allowed types
 */
 const PARAGRAPH = `<p id="p1" />`
-const FIGURE = `<fig id="f1"><graphic /><caption id="f1-caption"><p id="p1" /></caption></fig>`
+const FIGURE = `<fig id="f1"><graphic /><caption id="f1-caption"><p id="f1-caption-p1" /></caption></fig>`
 
 const CONTAINER_SNIPPET = `
 <p>PARAGRAPH</p>
@@ -32,21 +32,20 @@ test('Paste: pasting a container into body', t => {
   setCursor(editor, 'p1.content', 0)
   api.paste(snippet)
   let body = doc.get('body')
-  let expected = ['p', 'heading', 'p']
-  let actual = body.getChildren().map(el => el.type)
+  let expected = ['paragraph', 'heading', 'paragraph']
+  let actual = body.getNodes().map(el => el.type)
   t.deepEqual(actual, expected, 'content should have been pasted into body')
   t.end()
 })
 
-test('Paste: pasting a container into figure caption', t => {
+test('Paste: pasting a container into figure legend', t => {
   let { editor, snippet, api, doc } = _setup(t, CONTAINER_SNIPPET, FIGURE)
-  setCursor(editor, 'p1.content', 0)
+  setCursor(editor, 'f1-caption-p1.content', 0)
   api.paste(snippet)
-  let caption = doc.get('f1-caption')
   // ATTENTION: for now substance does not transform unsupported nodes (e.g. heading -> paragraph)
   // and instead drops the invalid node
-  let expected = ['p', 'p']
-  let actual = caption.getChildren().map(el => el.type)
+  let expected = ['paragraph', 'paragraph']
+  let actual = doc.resolve(['f1', 'legend']).map(el => el.type)
   t.deepEqual(actual, expected, 'only <p> elements should have been pasted')
   t.end()
 })
@@ -59,17 +58,16 @@ function _setup (t, snippetHtml, fixture) {
 
   loadBodyFixture(editor, fixture)
 
-  let importer = editor.context.configurator.getImporter('html')
   let snippet = doc.createSnippet()
   let container = snippet.getContainer()
-  importer.setDocument(snippet)
+  let importer = editor.context.config.createImporter('html', snippet)
   let els = DefaultDOMElement.parseSnippet(snippetHtml.trim(), 'html')
   if (!isArray(els)) els = [els]
   els = els.filter(el => el.isElementNode())
   els.forEach(el => {
     let node = importer.convertElement(el)
     if (node) {
-      container.show(node.id)
+      container.append(node.id)
     }
   })
   return { editor, snippet, api, doc }

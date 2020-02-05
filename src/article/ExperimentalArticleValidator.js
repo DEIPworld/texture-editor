@@ -1,6 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { forEach, isNil } from 'substance'
-import { REQUIRED_PROPERTIES } from './ArticleConstants'
+import { forEach, isNil, getKeyForPath } from 'substance'
 
 /*
   EXPERIMENTAL: This should only be used as a prototype.
@@ -8,22 +7,24 @@ import { REQUIRED_PROPERTIES } from './ArticleConstants'
 */
 
 export default class ExperimentalArticleValidator {
-  constructor (articleSession, editorState) {
-    this._articleSession = articleSession
-    this._editorState = editorState
+  // TODO: maybe we want to use ArticleAPI here
+  constructor (api) {
+    this._api = api
   }
 
   initialize () {
     let article = this._getArticle()
+    let editorState = this._getEditorState()
     forEach(article.getNodes(), node => {
       CheckRequiredFields.onCreate(this, node)
     })
     // TODO: or should we bind to editorState updates?
-    this._editorState.addObserver(['document'], this._onDocumentChange, this, { stage: 'update' })
+    editorState.addObserver(['document'], this._onDocumentChange, this, { stage: 'update' })
   }
 
   dispose () {
-    this._editorState.removeObserver(this)
+    let editorState = this._getEditorState()
+    editorState.removeObserver(this)
   }
 
   /*
@@ -32,7 +33,7 @@ export default class ExperimentalArticleValidator {
   clearIssues (path, type) {
     // Note: storing the issues grouped by propertyName in node['@issues']
     let nodeIssues = this._getNodeIssues(path[0])
-    nodeIssues.clear(path.slice(1).join('.'), type)
+    nodeIssues.clear(getKeyForPath(path.slice(1)), type)
     this._markAsDirty(path)
   }
 
@@ -40,15 +41,20 @@ export default class ExperimentalArticleValidator {
     Thoughts: adding issues one-by-one, and clearing by type
   */
   addIssue (path, issue) {
-    // console.log('ArticleValidator: adding issue for %s', path.join('.'), issue)
+    // console.log('ArticleValidator: adding issue for %s', getKeyForPath(path), issue)
     let nodeIssues = this._getNodeIssues(path[0])
-    nodeIssues.add(path.slice(1).join('.'), issue)
+    nodeIssues.add(getKeyForPath(path.slice(1)), issue)
     this._markAsDirty(path)
   }
 
+  _getEditorState () {
+    return this._api.editorSession.editorState
+  }
+
   _markAsDirty (path) {
+    let editorState = this._getEditorState()
     // Note: marking both the node and the property as dirty
-    const documentObserver = this._editorState._getDocumentObserver()
+    const documentObserver = editorState._getDocumentObserver()
     const nodeId = path[0]
     let issuesPath = [nodeId, '@issues']
     documentObserver.setDirty(issuesPath)
@@ -84,7 +90,7 @@ export default class ExperimentalArticleValidator {
       }
     })
     Object.keys(change.updated).forEach(key => {
-      let path = key.split(',')
+      let path = key.split('.')
       let node = article.get(path[0])
       if (node) {
         CheckRequiredFields.onUpdate(this, node, path, article.get(path))
@@ -93,7 +99,11 @@ export default class ExperimentalArticleValidator {
   }
 
   _getArticle () {
-    return this._articleSession.getDocument()
+    return this._api.getDocument()
+  }
+
+  _getApi () {
+    return this._api
   }
 }
 
@@ -105,17 +115,17 @@ const FIELD_IS_REQUIRED = {
 
 const CheckRequiredFields = {
   onCreate (validator, node) {
-    if (REQUIRED_PROPERTIES.hasOwnProperty(node.type)) {
-      let data = node.toJSON()
-      Object.keys(data).forEach(name => {
+    const api = validator._getApi()
+    let data = node.toJSON()
+    Object.keys(data).forEach(name => {
+      if (api._isFieldRequired([node.type, name])) {
         this.onUpdate(validator, node, [node.id, name], data[name])
-      })
-    }
+      }
+    })
   },
   onUpdate (validator, node, path, value) {
-    // ATTENTION / HACK: assuming that all registered requirements are of the form [type, propName]
-    let requiredProps = REQUIRED_PROPERTIES[node.type]
-    if (requiredProps && requiredProps.has(path[1])) {
+    const api = validator._getApi()
+    if (api._isFieldRequired([node.type].concat(path.slice(1)))) {
       validator.clearIssues(path, FIELD_IS_REQUIRED.type)
       // TODO: we probably want to use smarter validators than this
       if (isNil(value) || value === '') {

@@ -1,8 +1,8 @@
-/* TODO: use variables! */
-.sc-container-editor .sc-text-node:only-child .sc-text-property.sm-empty:before,
-.sc-text-input .sc-text-property.sm-empty:before {
+.sc-container-editor > .sc-text-node:only-child > .sc-text-property.sm-empty:before,
+.sc-text-input .sc-text-property.sm-empty:before,
+.sc-text-property-editor .sc-text-property.sm-empty:before {
   content: attr(data-placeholder);
   position: absolute;
-  color: #ccc;
-  font-weight: 400;
+  color: var(--t-placeholder-text-color);
+  font-weight: var(--t-normal-font-weight);
 }

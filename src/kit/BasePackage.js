@@ -1,68 +1,55 @@
 import {
-  ButtonPackage, ContextMenuPackage, OverlayPackage, DropzonesPackage,
-  ScrollbarPackage, ScrollPanePackage, BodyScrollPanePackage, SplitPanePackage,
-  TabbedPanePackage, ToolPanelPackage
+  AnnotationComponent, IsolatedInlineNodeComponent, TextPropertyComponent
 } from 'substance'
 
-import {
-  IsolatedNodeComponentNew, IsolatedInlineNodeComponentNew, ContainerEditorNew,
-  TextPropertyComponentNew, TextPropertyEditorNew
-} from './model/SubstanceModifications'
-
-import AnnotationComponent from './ui/AnnotationComponent'
-import ScrollPane from './ui/ScrollPane'
 import BodyScrollPane from './ui/BodyScrollPane'
-import Menu from './ui/Menu'
-import MenuGroup from './ui/MenuGroup'
-import MenuItem from './ui/MenuItem'
-import ModalDialog from './ui/ModalDialog'
 import Button from './ui/Button'
+import ContainerEditor from './ui/_ContainerEditor'
 import ContextMenu from './ui/ContextMenu'
-import Overlay from './ui/Overlay'
+import Input from './ui/Input'
+import IsolatedNodeComponent from './ui/_IsolatedNodeComponent'
+import ModalDialog from './ui/ModalDialog'
+import OverlayCanvas from './ui/OverlayCanvas'
+import ScrollPane from './ui/ScrollPane'
+import TextPropertyEditor from './ui/_TextPropertyEditor'
+import TextInput from './ui/TextInput'
+import Tool from './ui/Tool'
 import ToggleTool from './ui/ToggleTool'
 import Toolbar from './ui/Toolbar'
 import ToolDropdown from './ui/ToolDropdown'
 import ToolGroup from './ui/ToolGroup'
-import ToolPrompt from './ui/ToolPrompt'
+import ToolSeparator from './ui/ToolSeparator'
+import ToolSpacer from './ui/ToolSpacer'
 
 export default {
   name: 'TextureBase',
   configure: function (configurator) {
-    configurator.import(ButtonPackage)
-    configurator.import(ScrollPanePackage)
-    configurator.import(BodyScrollPanePackage)
-    configurator.import(SplitPanePackage)
-    configurator.import(TabbedPanePackage)
-    configurator.import(ScrollbarPackage)
-    configurator.import(ContextMenuPackage)
-    configurator.import(OverlayPackage)
-    configurator.import(DropzonesPackage)
-    configurator.import(ToolPanelPackage)
-
     configurator.addComponent('annotation', AnnotationComponent)
     // customized built-ins
-    configurator.addComponent('container-editor', ContainerEditorNew)
-    configurator.addComponent('isolated-node', IsolatedNodeComponentNew)
-    configurator.addComponent('inline-node', IsolatedInlineNodeComponentNew)
-    configurator.addComponent('text-property', TextPropertyComponentNew)
-    configurator.addComponent('text-property-editor', TextPropertyEditorNew)
+    configurator.addComponent('container-editor', ContainerEditor)
+    configurator.addComponent('isolated-node', IsolatedNodeComponent)
+    configurator.addComponent('inline-node', IsolatedInlineNodeComponent)
+    configurator.addComponent('text-property', TextPropertyComponent)
+    configurator.addComponent('text-property-editor', TextPropertyEditor)
+    configurator.addComponent('text-input', TextInput)
 
     // replacing Substance components with custom ones
-    configurator.addComponent('scroll-pane', ScrollPane, true)
-    configurator.addComponent('body-scroll-pane', BodyScrollPane, true)
+    configurator.addComponent('scroll-pane', ScrollPane)
+    configurator.addComponent('body-scroll-pane', BodyScrollPane)
 
-    configurator.addComponent('menu', Menu, true)
-    configurator.addComponent('menu-group', MenuGroup, true)
-    configurator.addComponent('menu-item', MenuItem, true)
+    configurator.addComponent('button', Button)
+    configurator.addComponent('context-menu', ContextMenu)
+    configurator.addComponent('input', Input)
     configurator.addComponent('modal', ModalDialog)
-    configurator.addComponent('button', Button, true)
-    configurator.addComponent('context-menu', ContextMenu, true)
-    configurator.addComponent('overlay', Overlay, true)
-    configurator.addComponent('toggle-tool', ToggleTool, true)
-    configurator.addComponent('toolbar', Toolbar, true)
-    configurator.addComponent('tool-dropdown', ToolDropdown, true)
-    configurator.addComponent('tool-group', ToolGroup, true)
-    configurator.addComponent('tool-prompt', ToolPrompt, true)
+    configurator.addComponent('overlay-canvas', OverlayCanvas)
+    configurator.addComponent('tool', Tool)
+    // TODO: remove toggle-tool
+    configurator.addComponent('toggle-tool', ToggleTool)
+    configurator.addComponent('toolbar', Toolbar)
+    configurator.addComponent('tool-dropdown', ToolDropdown)
+    configurator.addComponent('tool-group', ToolGroup)
+    configurator.addComponent('tool-separator', ToolSeparator)
+    configurator.addComponent('tool-spacer', ToolSpacer)
 
     configurator.addLabel('text-types', {
       en: 'Text Type',
@@ -76,5 +63,7 @@ export default {
       en: 'Container',
       de: 'Container'
     })
+
+    configurator.addIcon('dropdown', { 'fontawesome': 'fa-angle-down' })
   }
 }

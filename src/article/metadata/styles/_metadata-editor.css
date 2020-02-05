@@ -1,3 +1,13 @@
+/* HACKZ:
+  1. do not position the Edit dropdown on the right because ATM there is the
+  modal close button.
+  2. hide the save button
+*/
+.sc-modal-dialog .sc-metadata-editor .se-toolbar-wrapper .sc-tool-spacer,
+.sc-modal-dialog .sc-metadata-editor .se-toolbar-wrapper button.sm-save {
+  display: none;
+}
+
 .sc-metadata-editor {
   display: flex;
   flex-direction: row;
@@ -17,7 +27,6 @@
   z-index: 1000;
   padding: 4px;
   padding-bottom: 4px;
-  padding-left: 270px;
   box-shadow: 0 0 0 0.75pt #d1d1d1, 0 0 3pt 0.75pt #ccc;
 }
 
@@ -27,11 +36,12 @@
 }
 
 .sc-metadata-editor .se-toolbar-wrapper .sc-toolbar {
-  max-width: 710px; /* 760 - 50 for padding */
+  max-width: 980px; /* 760 - 50 for padding */
 }
 
 .sc-metadata-editor.sm-compact .se-toolbar-wrapper .sc-toolbar {
   margin: 0 auto;
+  max-width: 710px;
 }
 
 .sc-metadata-editor > .se-main-section > .se-content-section {
@@ -68,6 +78,10 @@
   cursor: pointer;
 }
 
+.sc-metadata-editor .sc-meta-section-toc-entry.sm-empty {
+  display: none;
+}
+
 .sc-metadata-editor .sc-meta-section-toc-entry:hover {
   color: #111;
 }
@@ -93,6 +107,10 @@
 
 .sc-metadata-editor .se-toc a {
   text-decoration: none;
+}
+
+.sc-metadata-section.sm-empty {
+  display: none;
 }
 
 .sc-metadata-section > .se-heading {

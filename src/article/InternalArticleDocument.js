@@ -1,49 +1,26 @@
-import { Document } from 'substance'
-import XrefIndex from './XrefIndex'
-import TextureEditing from './TextureEditing'
-import TextureEditingInterface from './TextureEditingInterface'
+import { Document, documentHelpers, EditingInterface } from 'substance'
+import ArticleEditingImpl from './shared/ArticleEditingImpl'
+import { DEFAULT_JATS_SCHEMA_ID } from './ArticleConstants'
 
-// TODO: it would be better to use a general document implementation (like XMLDocument)
-// and come up with a new mechanism to bind indexes to the document instance
-// Helpers like findByType and such can be achieved differently
 export default class InternalArticleDocument extends Document {
-  _initialize () {
-    super._initialize()
-
-    // special index for xref lookup
-    this.addIndex('xrefs', new XrefIndex())
-  }
-
   getRootNode () {
     return this.get('article')
   }
 
-  getXRefs () {
-    let articleEl = this.get('article')
-    return articleEl.findAll('xref')
-  }
-
-  getTitle () {
-    return this.get('front').find('title').getText()
-  }
-
   createEditingInterface () {
-    return new TextureEditingInterface(this, { editing: new TextureEditing() })
-  }
-
-  createElement (type, data) {
-    let nodeData = Object.assign({
-      type
-    }, data)
-    return this.create(nodeData)
+    return new EditingInterface(this, { editing: new ArticleEditingImpl() })
   }
 
   find (selector) {
-    return this.get('article').find(selector)
+    return this.getRootNode().find(selector)
   }
 
   findAll (selector) {
-    return this.get('article').findAll(selector)
+    return this.getRootNode().findAll(selector)
+  }
+
+  getTitle () {
+    this.resolve(['article', 'title'])
   }
 
   invert (change) {
@@ -73,42 +50,37 @@ export default class InternalArticleDocument extends Document {
     return inverted
   }
 
+  // Overridden to retain the original docType
+  newInstance () {
+    let doc = super.newInstance()
+    doc.docType = this.docType
+    return doc
+  }
+
   static createEmptyArticle (schema) {
     let doc = new InternalArticleDocument(schema)
-    const $$ = (type, id) => {
-      if (!id) id = type
-      return doc.create({type, id})
-    }
-
-    let articleRecord = doc.create({
-      type: 'article-record',
-      id: 'article-record',
-      permission: $$('permission', 'article-permission').id
+    documentHelpers.createNodeFromJson(doc, {
+      type: 'article',
+      id: 'article',
+      metadata: {
+        type: 'metadata',
+        id: 'metadata',
+        permission: {
+          type: 'permission',
+          id: 'permission'
+        }
+      },
+      abstract: {
+        type: 'abstract',
+        id: 'abstract',
+        content: [{ type: 'paragraph' }]
+      },
+      body: {
+        type: 'body',
+        id: 'body'
+      }
     })
-
-    $$('article').append(
-      $$('metadata').append(
-        articleRecord,
-        $$('authors'),
-        $$('editors'),
-        $$('groups'),
-        $$('organisations'),
-        $$('awards'),
-        $$('keywords'),
-        $$('subjects')
-      ),
-      $$('content').append(
-        $$('front').append(
-          $$('title'),
-          $$('abstract')
-        ),
-        $$('body'),
-        $$('back').append(
-          $$('references'),
-          $$('footnotes')
-        )
-      )
-    )
+    doc.docType = DEFAULT_JATS_SCHEMA_ID
     return doc
   }
 }

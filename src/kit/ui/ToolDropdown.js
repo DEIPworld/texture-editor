@@ -3,70 +3,55 @@ import Tooltip from './Tooltip'
 
 // TODO: use OverlayMixin to avoid code redundancy
 export default class ToolDropdown extends ToolGroup {
-  constructor (...args) {
-    super(...args)
-
-    this._deriveState(this.props)
-  }
-
   didMount () {
-    this.context.appState.addObserver(['overlayId'], this.rerender, this, { stage: 'render' })
+    this.context.editorState.addObserver(['overlayId'], this.rerender, this, { stage: 'render' })
   }
-
   dispose () {
-    this.context.appState.removeObserver(this)
+    this.context.editorState.removeObserver(this)
   }
-
-  willReceiveProps (newProps) {
-    this._deriveState(newProps)
-  }
-
   render ($$) {
+    const appState = this.context.editorState
+    const { commandStates, style, theme, hideDisabled, alwaysVisible } = this.props
+    const toggleName = this._getToggleName()
+    const hasEnabledItem = this._derivedState.hasEnabledItem
+    const showChoices = appState.overlayId === this.getId()
+
     let el = $$('div').addClass('sc-tool-dropdown')
     el.addClass('sm-' + this.props.name)
 
-    const appState = this.context.appState
-    const commandStates = this.props.commandStates
-    const toggleName = this._getToggleLabel()
-    const showDisabled = this.props.showDisabled
-    const hasEnabledTools = this._hasEnabledTools
-    const showChoices = appState.overlayId === this.getId()
-    const style = this.props.style
-    const theme = this.props.theme
+    if (!hasEnabledItem) {
+      el.addClass('sm-disabled')
+    } else if (showChoices) {
+      el.addClass('sm-open')
+    }
 
-    // Only render this if there are enabled tools
-    // except if the user decided to show disabled commands
-    if (showDisabled || hasEnabledTools) {
+    if (!hideDisabled || hasEnabledItem || alwaysVisible) {
       const Button = this.getComponent('button')
-      const Menu = this.getComponent('menu')
       let toggleButtonProps = {
         dropdown: true,
         active: showChoices,
         theme,
-        // Note: we are passing the command state allowing to render labels with template strings
+        // HACK: we are passing the command state allowing to render labels with template strings
         commandState: commandStates[toggleName]
       }
       if (style === 'minimal') {
         toggleButtonProps.icon = toggleName
-      } else if (style === 'descriptive') {
-        toggleButtonProps.label = toggleName
       } else {
-        toggleButtonProps.icon = toggleName
         toggleButtonProps.label = toggleName
       }
-      let toggleButton = $$(Button, toggleButtonProps).addClass('se-toggle')
-        .on('click', this._toggleChoices)
+      let toggleButton = $$(Button, toggleButtonProps).ref('toggle')
+        .addClass('se-toggle')
+        .on('click', this._onClick)
+        // ATTENTION: we need to preventDefault on mousedown, otherwise
+        // native DOM selection disappears
+        .on('mousedown', this._onMousedown)
       el.append(toggleButton)
 
       if (showChoices) {
-        const items = this._getMenuItems()
         el.append(
           $$('div').addClass('se-choices').append(
-            $$(Menu, {
-              items,
-              commandStates
-            })
-          )
+            this._renderItems($$)
+          ).ref('choices')
         )
       } else if (style === 'minimal' || toggleName !== this.props.name) {
         // NOTE: tooltips are only rendered when explanation is needed
@@ -85,51 +70,52 @@ export default class ToolDropdown extends ToolGroup {
     })
   }
 
+  get _isTopLevel () {
+    return true
+  }
+
   _deriveState (props) {
-    const commandStates = props.commandStates
-    const items = props.items
-    let activeCommandName
-    let hasEnabledTools = false
-    this._items = items.map(toolSpec => {
-      const commandName = toolSpec.commandName
-      let commandState = commandStates[commandName] || { disabled: true }
-      if (!activeCommandName && commandState.active) activeCommandName = commandName
-      if (!commandState.disabled) hasEnabledTools = true
-      return {
-        name: commandName,
-        toolSpec,
-        commandState
+    super._deriveState(props)
+
+    if (this.props.displayActiveCommand) {
+      this._derivedState.activeCommandName = this._getActiveCommandName(props.items, props.commandStates)
+    }
+  }
+
+  _getActiveCommandName (items, commandStates) {
+    // FIXME: getting an active commandName does only make sense for a flat dropdown
+    for (let item of items) {
+      if (item.type === 'command') {
+        const commandName = item.name
+        let commandState = commandStates[commandName]
+        if (commandState && commandState.active) {
+          return commandName
+        }
       }
-    })
-    this._activeCommandName = activeCommandName
-    this._hasEnabledTools = hasEnabledTools
+    }
   }
 
-  /*
-    This can be overridden to control the label
-  */
-  _getToggleLabel () {
-    return this._activeCommandName || this.props.name
+  _getToggleName () {
+    if (this.props.displayActiveCommand) {
+      return this._derivedState.activeCommandName || this.props.name
+    } else {
+      return this.props.name
+    }
   }
 
-  _getMenuItems () {
-    const showDisabled = this.props.showDisabled
-    let menuItems = []
-    this._items.forEach(item => {
-      // ATTENTION: not showing the disabled ones is violating the users choice
-      // given via configuration 'showDisabled'
-      if (showDisabled || this.isToolEnabled(item.toolSpec, item.commandState)) {
-        menuItems.push({
-          commandName: item.name
-        })
-      }
-    })
-    return menuItems
+  _onMousedown (event) {
+    event.preventDefault()
   }
 
-  _toggleChoices (event) {
+  _onClick (event) {
     event.preventDefault()
     event.stopPropagation()
-    this.send('toggleOverlay', this.getId())
+    if (this._hasChoices()) {
+      this.send('toggleOverlay', this.getId())
+    }
+  }
+
+  _hasChoices () {
+    return (!this.props.hideDisabled || this._derivedState.hasEnabledItem)
   }
 }

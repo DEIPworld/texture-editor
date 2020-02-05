@@ -18,15 +18,6 @@ export function getSeparatedText (rootEl, selector) {
   }
 }
 
-export function getHTML (rootEl, selector) {
-  let el = rootEl.find(selector)
-  if (el) {
-    return el.innerHTML
-  } else {
-    return ''
-  }
-}
-
 export function getAttr (rootEl, selector, attr) {
   let el = rootEl.find(selector)
   if (el) {
@@ -34,23 +25,6 @@ export function getAttr (rootEl, selector, attr) {
   } else {
     return ''
   }
-}
-
-export function replaceWith (el, els) {
-  const parent = el.parentNode
-  const next = el.nextSibling
-  els.forEach(_el => parent.insertBefore(_el, next))
-  el.remove()
-}
-
-export function unwrapChildren (el) {
-  let parent = el.parentNode
-  let children = el.children
-  let L = children.length
-  for (let i = 0; i < L; i++) {
-    parent.insertBefore(children[i], el)
-  }
-  parent.removeChild(el)
 }
 
 export function findChild (el, cssSelector) {
@@ -73,22 +47,22 @@ export function findAllChildren (el, cssSelector) {
   return result
 }
 
-export function isMixed (el) {
-  let childNodes = el.childNodes
-  const L = childNodes.length
-  for (var i = 0; i < L; i++) {
-    const childNode = childNodes[i]
-    if (childNode.isTextNode() && !/^\s*$/.exec(childNode.textContent)) {
-      return true
-    }
-  }
-  return false
-}
-
 export function printElement (el, options = {}) {
   let maxLevel = options.maxLevel || 1000
   let res = _printElement(el, 1, maxLevel)
   return res
+}
+
+export function retainChildren (el, ...allowedTagNames) {
+  allowedTagNames = new Set(allowedTagNames)
+  let childNodes = el.getChildNodes()
+  for (let idx = childNodes.length - 1; idx >= 0; idx--) {
+    let child = childNodes[idx]
+    if (!allowedTagNames.has(child.tagName)) {
+      el.removeAt(idx)
+    }
+  }
+  return el
 }
 
 function _printElement (el, level, maxLevel) {

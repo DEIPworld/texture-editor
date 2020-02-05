@@ -1,45 +1,15 @@
 # Texture [![Build Status](https://travis-ci.org/substance/texture.svg?branch=master)](https://travis-ci.org/substance/texture)
+[![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/substance/texture.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/substance/texture/context:javascript)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/substance/texture.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/substance/texture/alerts)
 
 Texture is a toolset designed for the production of scientific content. It uses the [Dar Format](http://github.com/substance/dar), which defines a stricter form of the [JATS Archiving and Interchange Tag Set ("green" v. 1.1)](https://jats.nlm.nih.gov/archiving/1.1/) XML standard.
 
 ![Texture User Interface](texture.png)
 
-## Roadmap
 
-Texture is still in a beta stage: there are likely to be missing features, bugs and API changes. But we would :heart: to get your suggestions and :bug: reports.
+## Feature requests and Feedback
 
-- ✓ = ready for production use
-- Beta = ready for beta user testing
-
-We generally only plan one or two releases ahead, and aim ship regularly.
-
-Feature                                 | Ready
-:-------------------------------------- | :------------:
-General editing                         | Beta
-Copy & Paste (from Word, etc.)          | Beta
-Find and Replace                        | Beta
-Auto-numbered labels (`xref`, `fig`, etc. ) | ✓
-Reference editing (`element-citation`)  | ✓
-Authors and Affiliations                | ✓
-[Dar](https://github.com/substance/dar) Storage | ✓
-Article Record (`issue`, `fpage`, etc.) | ✓
-Translations                            | ✓
-Group authors                           | ✓
-Realtime Collaborative Editing          |
-**Supported Content**                   |
-Paragraph                               | ✓
-Heading                                 | ✓
-Inline Formula                          | ✓
-Display Formula                         | 2.0
-Definition List                         | 2.0
-List                                    | ✓
-Blockquote                              | ✓
-Figure                                  | ✓
-Table                                   | ✓
-Bold & Italic                           | ✓
-Ext-Link                                | ✓
-Subscript & Superscript                 | ✓
-
+Feature requests can be made via the GitHub issues using a Feature request template. It will be assessed and costed, then scheduled accordingly in collaboration with the requesting organisation. Please feedback any problems with the product using the Bug template.
 
 ## Install
 
@@ -87,6 +57,14 @@ To package the application for distribution do the following:
 
 ```bash
 $ npm run release
+```
+
+### MacOS
+
+Running the installed application from command line:
+
+```
+open -a /Applications/Texture.app my-article.dar
 ```
 
 ## Running tests

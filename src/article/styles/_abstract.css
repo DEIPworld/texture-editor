@@ -1,0 +1,12 @@
+.sc-abstract.sm-hidden {
+  display: none;
+}
+
+.sc-abstract .sc-heading {
+  cursor: default;
+}
+
+.sc-abstract .sc-abstract-content .container-node {
+  border: var(--t-input-default-border);
+  border-radius: var(--t-border-radius);
+}

@@ -1,9 +1,9 @@
 import { test } from 'substance-test'
 import { DefaultDOMElement } from 'substance'
 import {
-  InternalArticleDocument, InternalArticleSchema,
   createJatsImporter, createJatsExporter, createEmptyJATS
-} from '../index'
+} from 'substance-texture'
+import { createEmptyArticle } from './shared/testHelpers'
 
 const SIMPLE = `
 <table>
@@ -20,7 +20,7 @@ test('TableConverter: import simple table', t => {
   t.deepEqual(table.getDimensions(), [4, 3], 'table should have correct dimensions')
   let cellMatrix = table.getCellMatrix()
   let textContent = cellMatrix.map(row => {
-    return row.map(cell => cell.textContent)
+    return row.map(cell => cell.getText())
   })
   let expectedContent = [
     ['A', 'B', 'C'],
@@ -29,7 +29,7 @@ test('TableConverter: import simple table', t => {
     ['7', '8', '9']
   ]
   t.deepEqual(textContent, expectedContent, 'cell content should have been converted correctly')
-  t.ok(cellMatrix[0].every(cell => cell.getAttribute('heading')), 'all cells in first row should be heading')
+  t.ok(cellMatrix[0].every(cell => cell.heading), 'all cells in first row should be heading')
   t.end()
 })
 
@@ -79,7 +79,7 @@ test('TableConverter: import table with col span (1)', t => {
   let el = DefaultDOMElement.parseSnippet(COL_SPAN_1.trim(), 'xml')
   let table = _importTable(el)
   t.deepEqual(table.getDimensions(), [5, 4], 'table should have correct dimensions')
-  t.ok(table.getChildren().every(row => row.getChildCount() === 4), 'internally every row should have 4 cells')
+  t.ok(table.resolve('rows').every(row => row.cells.length === 4), 'internally every row should have 4 cells')
   let cellMatrix = table.getCellMatrix()
   let masterCell = cellMatrix[3][0]
   let spannedCell = cellMatrix[3][1]
@@ -113,7 +113,7 @@ test('TableConverter: import table with col span (2)', t => {
   let el = DefaultDOMElement.parseSnippet(COL_SPAN_2.trim(), 'xml')
   let table = _importTable(el)
   t.deepEqual(table.getDimensions(), [5, 4], 'table should have correct dimensions')
-  t.ok(table.getChildren().every(row => row.getChildCount() === 4), 'internally every row should have 4 cells')
+  t.ok(table.resolve('rows').every(row => row.cells.length === 4), 'internally every row should have 4 cells')
   let cellMatrix = table.getCellMatrix()
   let masterCell = cellMatrix[4][0]
   let spannedCell = cellMatrix[4][1]
@@ -147,7 +147,7 @@ test('TableConverter: import table with col span (3)', t => {
   let el = DefaultDOMElement.parseSnippet(COL_SPAN_3.trim(), 'xml')
   let table = _importTable(el)
   t.deepEqual(table.getDimensions(), [5, 4], 'table should have correct dimensions')
-  t.ok(table.getChildren().every(row => row.getChildCount() === 4), 'internally every row should have 4 cells')
+  t.ok(table.resolve('rows').every(row => row.cells.length === 4), 'internally every row should have 4 cells')
   let cellMatrix = table.getCellMatrix()
   let row4 = cellMatrix[3]
   let masterCell = cellMatrix[3][0]
@@ -182,7 +182,7 @@ test('TableConverter: import table with row span (1)', t => {
   let el = DefaultDOMElement.parseSnippet(ROW_SPAN_1.trim(), 'xml')
   let table = _importTable(el)
   t.deepEqual(table.getDimensions(), [5, 4], 'table should have correct dimensions')
-  t.ok(table.getChildren().every(row => row.getChildCount() === 4), 'internally every row should have 4 cells')
+  t.ok(table.resolve('rows').every(row => row.cells.length === 4), 'internally every row should have 4 cells')
   let cellMatrix = table.getCellMatrix()
   let row4 = cellMatrix[3]
   let row5 = cellMatrix[4]
@@ -202,10 +202,29 @@ test('TableConverter: export table with row span (1)', t => {
   t.end()
 })
 
+const TABLE_WITH_LINKS = `
+<table>
+  <tr>
+    <td id="td-1"><ext-link>link</ext-link></td>
+    <td><ext-link>link</ext-link></td>
+  </tr>
+</table>
+`
+
+test('TableConverter: import table with links', t => {
+  let el = DefaultDOMElement.parseSnippet(TABLE_WITH_LINKS.trim(), 'xml')
+  let table = _importTable(el)
+  let tableEl = _exportTable(table)
+  const links = tableEl.findAll('ext-link')
+  // Links should be imported regardless of cell's id attribute presence (see issue #1216)
+  t.equal(links.length, 2, 'there should be two links inside table')
+  t.end()
+})
+
 function _importTable (el) {
   // TODO: create a minimal document, and the JATS importer
   // then run the converter and see if the body node has the proper content
-  let doc = InternalArticleDocument.createEmptyArticle(InternalArticleSchema)
+  let doc = createEmptyArticle()
   let importer = createJatsImporter(doc)
   return importer.convertElement(el)
 }

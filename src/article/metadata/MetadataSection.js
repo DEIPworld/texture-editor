@@ -1,35 +1,64 @@
-import { ModelComponent } from '../../kit'
-import CardComponent from '../shared/CardComponent'
+import { Component } from 'substance'
+import { addModelObserver, removeModelObserver } from '../../kit'
+import MetadataCollectionComponent from './MetadataCollectionComponent'
 
-export default class MetadataSection extends ModelComponent {
+export default class MetadataSection extends Component {
+  didMount () {
+    addModelObserver(this.props.model, this._onModelUpdate, this)
+  }
+
+  dispose () {
+    removeModelObserver(this)
+  }
+
   render ($$) {
     const model = this.props.model
-    const label = this.getLabel(model.id)
-    const isCollection = model.isCollection
-
-    let el = $$('div').addClass('sc-metadata-section')
-    let ModelEditor = this.getComponent(model.type, true)
-    if (!ModelEditor) ModelEditor = isCollection ? this.getComponent('collection') : this.getComponent('entity')
-    let modelEl = $$(ModelEditor, { model }).ref('editor')
-    // non-collection models are wrapped in a Card
-    if (isCollection) {
-      const items = model.getItems()
-      if (items.length > 0) {
-        el.append(
-          $$('div').addClass('se-heading').append(
-            $$('div').addClass('se-header').append(label)
-          ),
-          modelEl
-        )
-      }
-    } else {
+    const name = this.props.name
+    // const label = this.getLabel(model.id)
+    let el = $$('div')
+      .addClass('sc-metadata-section')
+      .addClass(`sm-${name}`)
+      .attr({
+        'data-section': name
+      })
+    if (model.type === 'collection') {
+      let label = this.getLabel(name)
       el.append(
-        $$('div').addClass('se-heading').append(
+        $$('div').addClass('se-heading').attr('id', model.id).append(
           $$('div').addClass('se-header').append(label)
-        ),
-        $$(CardComponent, {modelId: model.id}).append(modelEl)
+        )
+      )
+      el.append(
+        $$(MetadataCollectionComponent, { model })
+      )
+    } else {
+      let CustomEditor = this.getComponent(model.id)
+      let label = this.getLabel(name)
+      el.append(
+        $$('div').addClass('se-heading').attr('id', model.id).append(
+          $$('div').addClass('se-header').append(label)
+        )
+      )
+      el.append(
+        $$(CustomEditor, { model })
       )
     }
+    if (model.length === 0) {
+      el.addClass('sm-empty')
+    }
     return el
+  }
+
+  // ATTENTION: doing incremental update manually to avoid double rerendering of child collection
+  // TODO: it would be good if Substance could avoid rerendering a component twice in one run
+  _onModelUpdate () {
+    let model = this.props.model
+    if (model.type === 'collection') {
+      if (model.length === 0) {
+        this.el.addClass('sm-empty')
+      } else {
+        this.el.removeClass('sm-empty')
+      }
+    }
   }
 }

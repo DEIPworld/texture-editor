@@ -1,12 +1,12 @@
-import { ListPackage } from 'substance'
-import TableConverter from '../r2t/TableConverter'
+import TableConverter from '../jats/TableConverter'
 
 import BoldConverter from './BoldConverter'
 import ExtLinkConverter from './ExtLinkConverter'
-import CodeblockConverter from './CodeblockConverter'
+import PreformatConverter from './PreformatConverter'
 import HeadingConverter from './HeadingConverter'
 import ItalicConverter from './ItalicConverter'
 import ListConverter from './ListConverter'
+import ListItemConverter from './ListItemConverter'
 import ParagraphConverter from './ParagraphConverter'
 import StrikeConverter from './StrikeConverter'
 import SubConverter from './SubConverter'
@@ -15,12 +15,12 @@ import UnderlineConverter from './UnderlineConverter'
 
 export default [
   BoldConverter,
-  CodeblockConverter,
+  PreformatConverter,
   ExtLinkConverter,
   HeadingConverter,
   ItalicConverter,
   ListConverter,
-  ListPackage.ListItemHTMLConverter,
+  ListItemConverter,
   ParagraphConverter,
   StrikeConverter,
   SubConverter,

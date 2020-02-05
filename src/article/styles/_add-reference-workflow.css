@@ -1,0 +1,25 @@
+.sc-add-reference .se-manual-add > .se-reftypes-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0 -5px;
+  padding: 0;
+}
+
+.sc-add-reference .se-manual-add > .se-reftypes-list > .se-type {
+  flex-grow: 1;
+  width: 30%;
+  height: var(--t-double-spacing);
+  margin: 5px;
+  padding: var(--t-half-spacing) 0;
+  border: var(--t-default-border);
+	border-radius: var(--t-border-radius);
+  text-align: center;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.sc-add-reference .se-manual-add > .se-reftypes-list > .se-type:hover {
+  background: var(---t-default-button-background);
+}

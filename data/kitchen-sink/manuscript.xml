@@ -1,63 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving DTD v1.0 20120330//EN" "JATS-journalarchiving.dtd">
-<article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ali="http://www.niso.org/schemas/ali/1.0">
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.2 20190208//EN" "JATS-archivearticle1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ali="http://www.niso.org/schemas/ali/1.0" article-type="research-article">
   <front>
     <article-meta>
       <article-categories>
-        <subj-group xml:lang="en">
+        <subj-group>
           <subject content-type="display-channel">Research Article</subject>
           <subject content-type="heading">Computational and Systems Biology</subject>
-        </subj-group>
-        <subj-group xml:lang="es">
           <subject content-type="display-channel">Artículo de investigación</subject>
           <subject content-type="heading">Biología computacional y de sistemas</subject>
         </subj-group>
       </article-categories>
       <title-group>
         <article-title>Kitchen Sink</article-title>
-        <trans-title-group xml:lang="es">
-          <trans-title id="trans-title-1">Objeto de visión a acción manual en <italic id="italic-1">cortezas parietales</italic>, premotoras y motoras de macaco</trans-title>
-        </trans-title-group>
+        <subtitle>A word processor for structured content</subtitle>
       </title-group>
       <contrib-group content-type="author">
-        <contrib contrib-type="person" equal-contrib="yes" corresp="no" deceased="no">
+        <contrib id="author-1" contrib-type="person" equal-contrib="yes" corresp="yes" deceased="no">
           <name>
-            <surname>Schaffelhofer</surname>
-            <given-names>Stefan</given-names>
+            <surname>Doe</surname>
+            <given-names>John</given-names>
           </name>
+          <email>john.doe@university</email>
           <xref ref-type="aff" rid="aff1" />
           <xref ref-type="aff" rid="aff2" />
         </contrib>
-        <contrib contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+        <contrib id="author-2" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
           <name>
-            <surname>Scherberger</surname>
+            <surname>Mustermann</surname>
             <given-names>Hansjörg</given-names>
           </name>
           <xref ref-type="aff" rid="aff1" />
           <xref ref-type="aff" rid="aff3" />
+          <xref ref-type="aff" rid="aff5" />
         </contrib>
-        <contrib id="group-82b48e1f5a16997cea0f19c820f933d4" contrib-type="group" equal-contrib="yes" corresp="no">
+        <contrib id="group-1" contrib-type="group" equal-contrib="yes" corresp="no">
           <collab>
             <named-content content-type="name">The Mouse Genome Sequencing Consortium</named-content>
             <email>mouse-project@example.com</email>
             <xref ref-type="aff" rid="aff2" />
             <xref ref-type="award" rid="fund1" />
             <contrib-group contrib-type="group-member">
-              <contrib contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+              <contrib id="author-3" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
                 <name>
                   <surname>Kelly</surname>
                   <given-names>Laura A.</given-names>
                 </name>
                 <xref ref-type="aff" rid="aff2" />
               </contrib>
-              <contrib contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+              <contrib id="author-4" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
                 <name>
                   <surname>Randall</surname>
                   <given-names>Daniel Lee</given-names>
                   <suffix>Jr.</suffix>
                 </name>
                 <string-name content-type="alias">Dan Randall</string-name>
-                <bio id="bio1">
+                <bio>
                   <p id="bio1_p1">This is a bio example.</p>
                   <p id="bio1_p2">With multiparagraphs.</p>
                 </bio>
@@ -68,7 +66,7 @@
         </contrib>
       </contrib-group>
       <contrib-group content-type="editor">
-        <contrib contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
+        <contrib id="editor-1" contrib-type="person" equal-contrib="no" corresp="no" deceased="no">
           <name>
             <surname>Kastner</surname>
             <given-names>Sabine</given-names>
@@ -99,6 +97,12 @@
         <city>Princeton</city>
         <country>United States</country>
       </aff>
+      <aff id="aff5">
+        <institution content-type="orgname">The Rockefeller University</institution>
+        <institution content-type="orgdiv1">Another Laboratory</institution>
+        <city>New York</city>
+        <country>United States</country>
+      </aff>
       <pub-date date-type="pub" iso-8601-date="1999-01-29">
         <day>29</day>
         <month>01</month>
@@ -106,6 +110,7 @@
       </pub-date>
       <volume>318</volume>
       <issue>7187</issue>
+      <issue-title>Des zones d’incertitudes en traduction</issue-title>
       <fpage>837</fpage>
       <lpage>841</lpage>
       <page-range>837-841</page-range>
@@ -143,16 +148,22 @@
       <abstract>
         <p id="p-1">Please note, this article uses content from different open access articles (eLife) for demoing purposes.</p>
       </abstract>
-      <trans-abstract id="trans-abstract-1" xml:lang="es">
-        <p id="p-1-1">Tenga en cuenta que este artículo utiliza contenido de diferentes artículos de acceso abierto (eLife) con fines de demostración. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id nibh id ipsum ultrices vehicula in et ante.</p>
-      </trans-abstract>
-      <kwd-group xml:lang="en">
+      <abstract abstract-type="executive-summary">
+        <title>eLife Digest</title>
+        <p id="p-1-1">This is an example of executive summary with sub sections.</p>
+        <sec id="sec-1">
+          <title>Custom abstract sub section</title>
+          <p id="p-1-1-1">Sub section content.</p>
+        </sec>
+      </abstract>
+      <abstract abstract-type="web-summary">
+        <p id="p-1-2">This is an example of web summary.</p>
+      </abstract>
+      <kwd-group>
         <kwd content-type="author-keyword">optogenetics</kwd>
         <kwd content-type="author-keyword">two-photon</kwd>
         <kwd content-type="author-keyword">calcium imaging</kwd>
         <kwd content-type="research-organism">Mouse</kwd>
-      </kwd-group>
-      <kwd-group xml:lang="es">
         <kwd content-type="author-keyword">nada</kwd>
         <kwd content-type="author-keyword">si</kwd>
       </kwd-group>
@@ -170,118 +181,221 @@
     </article-meta>
   </front>
   <body id="body">
-    <p id="p-2">Lorem <xref id="xref-1" ref-type="bibr" rid="r7">[1]</xref> ipsum <xref id="xref-2" ref-type="bibr" rid="r1">[2]</xref> dolor <ext-link id="ext-link-1" xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="http://substance.io">sit amet</ext-link>. Integer eget augue consequat, rhoncus velit nec, vehicula purus.</p>
-    <sec id="sec-1">
-      <title>Quisque malesuada</title>
-      <table-wrap id="table1">
-        <label>Table 1</label>
-        <caption id="table1_caption">
-          <title>Example Table</title>
-          <p id="table1_caption_p1">This is a table example.</p>
-        </caption>
-        <table id="t1">
-          <tbody>
-            <tr id="t1_1">
-              <th id="t1_1_1">A</th>
-              <th id="t1_1_2">B</th>
-              <th id="t1_1_3">C</th>
-              <th id="t1_1_4">D</th>
-            </tr>
-            <tr id="t1_2">
-              <td id="t1_2_1" colspan="2">1</td>
-              <td id="t1_2_3" rowspan="2" colspan="2">3</td>
-            </tr>
-            <tr id="t1_3">
-              <td id="t1_3_1">5</td>
-              <td id="t1_3_2" rowspan="2">6</td>
-            </tr>
-            <tr id="t1_4">
-              <td id="t1_4_1">9</td>
-              <td id="t1_4_3">11</td>
-              <td id="t1_4_4">12</td>
-            </tr>
-          </tbody>
-        </table>
-      </table-wrap>
-      <sec id="sec-2">
-        <title>Orci varius natoque penatibus et magnis</title>
-        <p id="p-3">Lorem <xref id="xref-3" ref-type="fig" rid="fig1">Figure 1</xref> ipsum dolor<xref id="xref-4" ref-type="fn" rid="fn1">1</xref> sit amet <xref id="xref-5" ref-type="bibr" rid="r1 r7">[1,2]</xref>. Integer eget augue consequat, rhoncus velit nec, vehicula purus.</p>
+    <sec id="sec-2">
+      <title>Inline content</title>
+      <p id="p-2">Lorem <xref id="xref-1" ref-type="bibr" rid="r7">[1]</xref> ipsum <xref id="xref-2" ref-type="bibr" rid="r1">[2]</xref> dolor <ext-link id="ext-link-1" ext-link-type="uri" xlink:href="http://substance.io">sit amet</ext-link>. Formatting <bold id="p-2-bold-1">bold</bold>,<italic id="p2-italic-1">italic</italic>, <sub id="p2-sub-1">sub</sub>,<sup id="p2-sup-1">sup</sup>, <monospace id="p2-monospace-1">monospace</monospace>, <sc id="p2-sc-1">small caps</sc>, <underline id="p2-underline-1">underline</underline>, <overline id="p2-overline-1">overline</overline>, <strike id="p2-strike-1">strike through</strike>.</p>
+      <p id="p-8">Formatting content inside a link: <ext-link id="ext-link-2"><italic id="italic-6">italic</italic>,<bold id="bold-4">bold</bold></ext-link>. Link inside of formatting: <italic id="italic-7">this is an <ext-link id="ext-link-5">italic link</ext-link></italic> facilisis diam nec neque accumsan, reference to a table <xref id="xref-6" ref-type="table" rid="table1">Table 1</xref>.</p>
+      <p id="p-9">The Dow Jones Industrial Average for February 7, 2006 <inline-graphic id="inline-graphic-1" mimetype="image" mime-subtype="svg" xlink:href="fig3.svg"/>.</p>
+      <p id="p-81">Math as part of the text <inline-formula id="inline-formula-1" content-type="math/tex"><tex-math><![CDATA[\sqrt(13)]]></tex-math></inline-formula>. You can also set a reference to block formula, like this: <xref id="xref-7" ref-type="disp-formula" rid="disp-formula-1">(1)</xref>.</p>
+    </sec>
+    <sec id="sec-3">
+      <title>Block level content</title>
+      <disp-quote id="disp-quote-1">
+        <p id="p-7">Curabitur vehicula mattis sodales. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+      </disp-quote>
+      <preformat id="_preformat-1" preformat-type="code"><![CDATA[import java.io._
+class Reader(fname: String) {
+private val in =
+  new BufferedReader(new FileReader(fname))
+
+@throws(classOf[IOException])
+def read() = in.read()
+}]]></preformat>
+      <disp-formula id="disp-formula-1" content-type="math/tex">
+        <label>(1)</label>
+        <tex-math><![CDATA[1+\frac{q^2}{(1-q)}+\frac{q^6}{(1-q)(1-q^2)}+\cdots=
+\prod_{j=0}^{\infty}\frac{1}{(1-q^{5j+2})(1-q^{5j+3})},
+\quad\quad \text{for }\lvert q\rvert<1.]]></tex-math>
+      </disp-formula>
+      <list list-type="bullet" id="list-1">
+        <list-item>
+          <p>Item 1</p>
+          <list list-type="order">
+            <list-item>
+              <p>Item 2</p>
+            </list-item>
+            <list-item>
+              <p>Item 3</p>
+            </list-item>
+          </list>
+        </list-item>
+        <list-item>
+          <p>Item 4</p>
+          <list list-type="order">
+            <list-item>
+              <p>Item 5</p>
+            </list-item>
+            <list-item>
+              <p>Item 6</p>
+              <list list-type="bullet">
+                <list-item>
+                  <p>Item 7</p>
+                </list-item>
+                <list-item>
+                  <p>Item 8</p>
+                </list-item>
+              </list>
+            </list-item>
+          </list>
+        </list-item>
+        <list-item>
+          <p>Item 9</p>
+        </list-item>
+      </list>
+      <disp-formula id="disp-formula-2" content-type="math/tex">
+        <label>(2)</label>
+        <tex-math><![CDATA[\sum_{i = 1}^{ \left[ \frac{n}{2} \right] }
+\binom{ x_{i, i + 1}^{i^{2}} }
+{ \left[ \frac{i + 3}{3} \right] }
+\frac{ \sqrt{ \mu(i)^{ \frac{3}{2}} (i^{2} - 1) } }
+{ \sqrt[3]{\rho(i) - 2} + \sqrt[3]{\rho(i) - 1} }]]></tex-math>
+      </disp-formula>
+      <sec id="sec-3-1">
+        <title>Tables</title>
+        <table-wrap id="table1">
+          <label>Table 1</label>
+          <caption>
+            <title>Example Table</title>
+            <p id="table1_caption_p1">This is a table example.</p>
+          </caption>
+          <table id="t1">
+            <tbody>
+              <tr id="t1_1">
+                <th id="t1_1_1">A</th>
+                <th id="t1_1_2">B</th>
+                <th id="t1_1_3">C</th>
+                <th id="t1_1_4">D</th>
+              </tr>
+              <tr id="t1_2">
+                <td id="t1_2_1" colspan="2">1</td>
+                <td id="t1_2_3" rowspan="2" colspan="2">3</td>
+              </tr>
+              <tr id="t1_3">
+                <td id="t1_3_1">5</td>
+                <td id="t1_3_2" rowspan="2">Formatting in table cell <bold id="t1-bold-1">bold</bold>,<italic id="t1-italic-1">italic</italic>, <sub id="t1-sub-1">sub</sub>,<sup id="t1-sup-1">sup</sup>, <monospace id="t1-monospace-1">monospace</monospace></td>
+              </tr>
+              <tr id="t1_4">
+                <td id="t1_4_1">9</td>
+                <td id="t1_4_3">Hyper <ext-link id="t1-ext-link-1" ext-link-type="uri" xlink:href="http://substance.io">link</ext-link> in table cell.</td>
+                <td id="t1_4_4">Reference citation in table cell <xref id="t1-xref-1" ref-type="bibr" rid="r7">[1]</xref></td>
+              </tr>
+              <tr id="t1_5">
+                <td id="t1_5_1">Table footnote<xref id="t1-xref-2" ref-type="table-fn" rid="tfn1">*</xref></td>
+                <td id="t1_5_2">Another table footnote<xref id="t1-xref-3" ref-type="table-fn" rid="tfn2">†</xref></td>
+                <td id="t1_5_3">Table footnote with multiple targets<xref id="t1-xref-4" ref-type="table-fn" rid="tfn1 tfn2">*, †</xref></td>
+                <td id="t1_5_4">16</td>
+              </tr>
+            </tbody>
+          </table>
+          <table-wrap-foot>
+            <fn-group>
+              <fn id="tfn1">
+                <label>*</label>
+                <p id="tfn1-p1">This is a table-footnote.</p>
+              </fn>
+              <fn id="tfn2">
+                <label>†</label>
+                <p id="tfn2-p1">Another table-footnote.</p>
+              </fn>
+            </fn-group>
+          </table-wrap-foot>
+        </table-wrap>
+      </sec>
+      <sec id="sec-3-2">
+        <title>Figures</title>
+        <p id="p-3">Reference to simple figure <xref id="xref-3" ref-type="fig" rid="fig1">Figure 1</xref>. Reference to footnote <xref id="xref-4" ref-type="fn" rid="fn1">1</xref>. Citation with two references <xref id="xref-5" ref-type="bibr" rid="r1 r7">[1,2]</xref>.</p>
         <fig id="fig1">
           <label>Figure 1</label>
-          <caption id="fig1-caption">
-            <title>Behavioural design and implantation details.</title>
-            <p id="fig1-caption-p1">Lorem ipsum dolor sit amet, ea ludus intellegat his, graece fastidii phaedrum ea mea, ne duo esse omnium.</p>
+          <caption>
+            <title>Figure with permissions.</title>
+            <p id="fig1-caption-p1">Legend.</p>
           </caption>
-          <graphic id="graphic-1" xmlns:xlink="http://www.w3.org/1999/xlink" mime-subtype="jpeg" mimetype="image" xlink:href="fig1.jpg" />
+          <graphic id="graphic-1" mimetype="image" mime-subtype="jpeg" xlink:href="fig1.jpg" />
           <permissions id="permission-2">
             <copyright-statement>© 2014 Surname et al.</copyright-statement>
             <copyright-year>2014</copyright-year>
             <copyright-holder>Surname et al.</copyright-holder>
             <license>
               <ali:license_ref>http://creativecommons.org/licenses/by/4.0/</ali:license_ref>
-              <license-p>This is an open access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, reproduction and adaptation in any medium and for any purpose provided that it is properly attributed. For attribution, the original author(s), title, publication source (PeerJ) and either DOI or URL of the article must be cited.</license-p>
+              <license-p>License text.</license-p>
             </license>
           </permissions>
         </fig>
-        <p id="p-5">Integer eget augue consequat, rhoncus velit nec, vehicula purus. Quisque malesuada feugiat tempus.</p>
-        <fig id="fig2">
-          <label>Figure 2</label>
-          <caption id="fig2-caption">
-            <title>Visual object processing in area AIP.</title>
-            <p id="fig2-caption-p1" />
+        <p id="p-4">Lorem ipsum.</p>
+        <fig-group id="fig2">
+          <fig id="fig2a">
+            <label>Figure 2A</label>
+            <caption>
+              <title>First panel</title>
+              <p id="fig2a-caption-p1">First panel legend</p>
+            </caption>
+            <graphic id="fig2a-graphic" mimetype="image" mime-subtype="jpeg" xlink:href="fig2.jpg" />
+          </fig>
+          <fig id="fig2b">
+            <label>Figure 2B</label>
+            <caption>
+              <title>Second panel</title>
+              <p id="fig2b-caption-p1">Second panel caption</p>
+            </caption>
+            <graphic id="fig2b-graphic" mimetype="image" mime-subtype="jpeg" xlink:href="fig1.jpg" />
+          </fig>
+        </fig-group>
+        <p id="p-5">abc</p>
+        <fig id="fig3">
+          <label>Figure 3</label>
+          <caption>
+            <title>Figure with metadata.</title>
+            <p id="fig3-caption-p1">Legend.</p>
           </caption>
-          <graphic id="graphic-2" xmlns:xlink="http://www.w3.org/1999/xlink" mime-subtype="jpeg" mimetype="image" xlink:href="fig2.jpg" />
+          <kwd-group>
+            <label>Field I</label>
+            <kwd>Value A</kwd>
+            <kwd>Value B</kwd>
+          </kwd-group>
+          <kwd-group>
+            <label>Field II</label>
+            <kwd>Value C</kwd>
+          </kwd-group>
+          <graphic id="fig3-graphic-1" mimetype="image" mime-subtype="jpeg" xlink:href="placeholder.jpg" />
         </fig>
-        <disp-quote id="disp-quote-1">
-          <p id="p-7">Curabitur vehicula mattis sodales. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-        </disp-quote>
-        <p id="p-8">Aenean facilisis diam nec neque accumsan, eu faucibus est efficitur <xref id="xref-6" ref-type="table" rid="table1">Table 1</xref>.</p>
-        <p id="p-81">Math as part of the text <inline-formula id="inline-formula-1" content-type="math/tex"><tex-math id="tex-math-1">\sqrt(13)</tex-math></inline-formula>.</p>
-        <list list-type="bullet" id="list-1">
-          <list-item>
-            <p>Item 1</p>
-            <list list-type="order">
-              <list-item>
-                <p>Item 2</p>
-              </list-item>
-              <list-item>
-                <p>Item 3</p>
-              </list-item>
-            </list>
-          </list-item>
-          <list-item>
-            <p>Item 4</p>
-            <list list-type="order">
-              <list-item>
-                <p>Item 5</p>
-              </list-item>
-              <list-item>
-                <p>Item 6</p>
-                <list list-type="bullet">
-                  <list-item>
-                    <p>Item 7</p>
-                  </list-item>
-                  <list-item>
-                    <p>Item 8</p>
-                  </list-item>
-                </list>
-              </list-item>
-            </list>
-          </list-item>
-          <list-item>
-            <p>Item 9</p>
-          </list-item>
-        </list>
+      </sec>
+      <sec id="sec-3-3">
+        <title>Supplementary Files</title>
+        <supplementary-material id="sm1" mimetype="application" mime-subtype="zip" xlink:href="example.zip">
+          <label>Supplementary File 1</label>
+          <caption>
+            <p id="sm1-caption-p1">Description of Supplementary File</p>
+          </caption>
+        </supplementary-material>
+        <supplementary-material id="sm2" xlink:href="https://elifesciences.org/download/aHR0cHM6Ly9jZG4uZWxpZmVzY2llbmNlcy5vcmcvYXJ0aWNsZXMvNDExNjIvZWxpZmUtNDExNjItZmlnMi1kYXRhMS12MS54bHN4/elife-41162-fig2-data1-v1.xlsx?_hash=ft%2F74Gq%2FH3UikSNsi%2Fm1GbowiBFMCRqQ3c1bwBSK9ak%3D">
+          <label>Supplementary File 2</label>
+          <caption>
+            <p id="sm2-caption-p1">A remote file</p>
+          </caption>
+        </supplementary-material>
+      </sec>
+    </sec>
+    <sec id="sec-4">
+      <title>Sections and Subsections</title>
+      <sec id="sec-4-1">
+        <title>Section Level 2</title>
+        <sec id="sec-4-1-1">
+          <title>Section Level 3</title>
+        </sec>
+      </sec>
+      <sec id="sec-4-2">
+        <title>Section heading with <break id="br1"/>Line-Break</title>
       </sec>
     </sec>
   </body>
   <back>
     <fn-group>
       <fn id="fn1">
-        <p id="p-10">Lorem ipsum dolor sit amet, ea ludus intellegat his, graece fastidii phaedrum ea mea, ne duo esse omnium.</p>
+        <label>1</label>
+        <p id="p-10">This is the first footnote.</p>
       </fn>
       <fn id="fn2">
-        <p id="p-11">Phasellus ex nulla, interdum condimentum pretium ac, auctor et tellus. Maecenas eu est a neque vestibulum laoreet.</p>
+        <p id="p-11">This. is the second footnote.</p>
       </fn>
     </fn-group>
     <ref-list>

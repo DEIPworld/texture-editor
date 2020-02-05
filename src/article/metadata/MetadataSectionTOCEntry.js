@@ -1,12 +1,11 @@
 import { ModelComponent } from '../../kit'
 
-export default class MetaSectionTOCEntry extends ModelComponent {
+export default class MetadataSectionTOCEntry extends ModelComponent {
   render ($$) {
-    const id = this.props.id
     const name = this.props.name
     const model = this.props.model
-    let el = $$('a').addClass('sc-meta-section-toc-entry')
-      .attr({ href: '#' + id })
+    let el = $$('div').addClass('sc-meta-section-toc-entry sc-toc-entry')
+      .attr({ 'data-section': name })
       .on('click', this.handleClick)
 
     let label = this.getLabel(name)
@@ -14,9 +13,9 @@ export default class MetaSectionTOCEntry extends ModelComponent {
       const items = model.getItems()
       if (items.length > 0) {
         label = label + ' (' + items.length + ')'
-        el.setStyle('display', 'block').append(label)
+        el.append(label)
       } else {
-        el.setStyle('display', 'none')
+        el.addClass('sm-empty')
       }
     } else {
       el.append(label)
@@ -25,10 +24,10 @@ export default class MetaSectionTOCEntry extends ModelComponent {
     return el
   }
 
-  handleClick (e) {
-    // NOTE: currently we are using link anchors for metadata panel navigation
-    // this way we are preventing Electron from opening links in a new window
-    // later we want to introduce different routing mechanism
-    e.stopPropagation()
+  handleClick (event) {
+    event.stopPropagation()
+    event.preventDefault()
+    // this is handled by MetadataEditor
+    this.send('scrollTo', { section: this.props.name })
   }
 }

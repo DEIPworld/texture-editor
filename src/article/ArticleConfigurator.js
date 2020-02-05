@@ -1,141 +1,35 @@
-import { AnnotationCommand, platform, SwitchTextTypeCommand } from 'substance'
 import TextureConfigurator from '../TextureConfigurator'
-import NumberedLabelGenerator from './shared/NumberedLabelGenerator'
-import InternalArticleSchema from './InternalArticleSchema'
-import ArticleHTMLExporter from './converter/html/ArticleHTMLExporter'
-import ArticleHTMLImporter from './converter/html/ArticleHTMLImporter'
-import ArticlePlainTextExporter from './converter/ArticlePlainTextExporter'
-import JATSExporter from './converter/JATSExporter'
-import JATSImporter from './converter/JATSImporter'
 
 export default class ArticleConfigurator extends TextureConfigurator {
-  constructor () {
-    super()
+  constructor (parent, name) {
+    super(parent, name)
 
-    this.config.models = {}
-    this.schema = InternalArticleSchema
+    this._xmlSchemaIds = new Set()
+    this._xmlValidators = new Map()
+    this._xmlTransformations = new Map()
   }
 
-  addNode () {
-    throw new Error('Texture Article Schema is final and can no be extended.')
+  registerSchemaId (xmlSchemaId) {
+    this._xmlSchemaIds.add(xmlSchemaId)
   }
 
-  addAnnotationTool (spec) {
-    let Command = spec.command || AnnotationCommand
-    this.addCommand(spec.name, Command, {
-      nodeType: spec.nodeType,
-      commandGroup: spec.commandGroup
-    })
-    this.addIcon(spec.name, { 'fontawesome': spec.icon })
-    this.addLabel(spec.name, spec.label)
-    if (spec.accelerator) {
-      this.addKeyboardShortcut(spec.accelerator, { command: spec.name })
-    }
+  isSchemaKnown (xmlSchemaId) {
+    return this._xmlSchemaIds.has(xmlSchemaId)
   }
 
-  addTextTypeTool (spec) {
-    this.addCommand(spec.name, SwitchTextTypeCommand, {
-      spec: spec.nodeSpec,
-      commandGroup: 'text-types'
-    })
-    this.addIcon(spec.name, { 'fontawesome': spec.icon })
-    this.addLabel(spec.name, spec.label)
-    if (spec.accelerator) {
-      this.addKeyboardShortcut(spec.accelerator, { command: spec.name })
-    }
+  addValidator (xmlSchemaId, validator) {
+    this._xmlValidators.set(xmlSchemaId, validator)
   }
 
-  setPanelsSpec (panelsSpec) {
-    this.config.panelsSpec = panelsSpec
+  getValidator (xmlSchemaId) {
+    return this._xmlValidators.get(xmlSchemaId)
   }
 
-  getPanelsSpec () {
-    return this.config.panelsSpec
+  addTransformation (xmlSchemaId, transformation) {
+    this._xmlTransformations.set(xmlSchemaId, transformation)
   }
 
-  // see NumberedLabelGenerator
-  setLabelGenerator (type, spec) {
-    if (!this.config.labelGenerator) {
-      this.config.labelGenerator = {}
-    }
-    this.config.labelGenerator[type] = spec
-  }
-
-  getLabelGenerator (type) {
-    let config
-    if (this.config.labelGenerator) {
-      config = this.config.labelGenerator[type] || {}
-    }
-    return new NumberedLabelGenerator(config)
-  }
-
-  getKeyboardShortcuts () {
-    return this.config.keyboardShortcuts
-  }
-
-  /*
-    Allows lookup of a keyboard shortcut by command name
-  */
-  getKeyboardShortcutsByCommandName (commandName) {
-    let keyboardShortcuts = {}
-    this.config.keyboardShortcuts.forEach((entry) => {
-      if (entry.spec.command) {
-        let shortcut = entry.key.toUpperCase()
-
-        if (platform.isMac) {
-          shortcut = shortcut.replace(/CommandOrControl/i, '⌘')
-          shortcut = shortcut.replace(/Ctrl/i, '^')
-          shortcut = shortcut.replace(/Shift/i, '⇧')
-          shortcut = shortcut.replace(/Enter/i, '↵')
-          shortcut = shortcut.replace(/Alt/i, '⌥')
-          shortcut = shortcut.replace(/\+/g, '')
-        } else {
-          shortcut = shortcut.replace(/CommandOrControl/i, 'Ctrl')
-        }
-
-        keyboardShortcuts[entry.spec.command] = shortcut
-      }
-    })
-    return keyboardShortcuts[commandName]
-  }
-
-  getExporter (type) {
-    switch (type) {
-      case 'text': {
-        if (!this._textExporter) {
-          this._textExporter = new ArticlePlainTextExporter(this)
-        }
-        return this._textExporter
-      }
-      case 'html': {
-        if (!this._htmlExporter) {
-          this._htmlExporter = new ArticleHTMLExporter(this)
-        }
-        return this._htmlExporter
-      }
-      case 'jats': {
-        if (!this._jatsExporter) {
-          this._jatsExporter = new JATSExporter(this)
-        }
-        return this._jatsExporter
-      }
-    }
-  }
-
-  getImporter (type) {
-    switch (type) {
-      case 'html': {
-        if (!this._htmlImporter) {
-          this._htmlImporter = new ArticleHTMLImporter(this)
-        }
-        return this._htmlImporter
-      }
-      case 'jats': {
-        if (!this._jatsImporter) {
-          this._jatsImporter = new JATSImporter(this)
-        }
-        return this._jatsImporter
-      }
-    }
+  getTransformation (xmlSchemaId) {
+    return this._xmlTransformations.get(xmlSchemaId)
   }
 }

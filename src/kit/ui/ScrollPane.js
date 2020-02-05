@@ -10,7 +10,6 @@ import AbstractScrollPane from './AbstractScrollPane'
   @prop {String} scrollbarType 'native' or 'substance' for a more advanced visual scrollbar. Defaults to 'native'
   @prop {String} [scrollbarPosition] 'left' or 'right' only relevant when scrollBarType: 'substance'. Defaults to 'right'
   @prop {ui/Highlights} [highlights] object that maintains highlights and can be manipulated from different sources
-  @prop {ui/TOCProvider} [tocProvider] object that maintains table of content entries
 
   @example
 
@@ -20,18 +19,12 @@ import AbstractScrollPane from './AbstractScrollPane'
     scrollbarPosition: 'left', // defaults to right
     onScroll: this.onScroll.bind(this),
     highlights: this.contentHighlights,
-    tocProvider: this.tocProvider
   })
   ```
 */
 export default class ScrollPane extends AbstractScrollPane {
   didMount () {
     super.didMount()
-
-    // TODO: these should come from AppState
-    if (this.refs.scrollbar && this.props.highlights) {
-      this.props.highlights.on('highlights:updated', this.onHighlightsUpdated, this)
-    }
 
     if (this.refs.scrollbar) {
       if (platform.inBrowser) {
@@ -49,9 +42,6 @@ export default class ScrollPane extends AbstractScrollPane {
   dispose () {
     super.dispose()
 
-    if (this.props.highlights) {
-      this.props.highlights.off(this)
-    }
     if (this.domObserver) {
       this.domObserver.disconnect()
     }
@@ -127,21 +117,11 @@ export default class ScrollPane extends AbstractScrollPane {
     }
   }
 
-  onHighlightsUpdated (highlights) {
-    this.refs.scrollbar.extendProps({
-      highlights: highlights
-    })
-  }
-
   onScroll () {
     let scrollPos = this.getScrollPosition()
     let scrollable = this.refs.scrollable
     if (this.props.onScroll) {
       this.props.onScroll(scrollPos, scrollable)
-    }
-    // Update TOCProvider given
-    if (this.props.tocProvider) {
-      this.props.tocProvider.markActiveEntry(this)
     }
     this.emit('scroll', scrollPos, scrollable)
   }

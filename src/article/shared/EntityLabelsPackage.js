@@ -1,6 +1,12 @@
+/* eslint-disable no-template-curly-in-string */
 export default {
   name: 'entity-labels',
   configure (config) {
+    // EXPERIMENTAL: I want to move to more natural label specifications
+    config.addLabel('enter-something', 'Enter ${something}')
+
+    // TODO: at some point I want to refactor the configuration so that we have only one place for labels
+
     // general
     config.addLabel('edit-references', 'Edit References')
     config.addLabel('edit-affiliations', 'Edit Affiliations')
@@ -73,7 +79,8 @@ export default {
     config.addLabel('translators', 'Translators')
     config.addLabel('edit-translators', 'Edit Translators')
 
-    config.addLabel('abstract', 'Abstract')
+    config.addLabel('abstract', 'Main Abstract')
+    config.addLabel('abstractType', 'Abstract Type')
     config.addLabel('accessedDate', 'Accessed Date')
     config.addLabel('accessionId', 'Accession ID')
     config.addLabel('archiveId', 'Archive ID')
@@ -82,16 +89,20 @@ export default {
     config.addLabel('confLoc', 'Conference Location')
     config.addLabel('confName', 'Conference Name')
     config.addLabel('containerTitle', 'Source')
+    config.addLabel('custom-abstract', 'Custom Abstract')
     config.addLabel('day', 'Day')
     config.addLabel('doi', 'DOI')
     config.addLabel('edition', 'Edition')
     config.addLabel('elocationId', 'E-Location ID')
     config.addLabel('fpage', 'First Page')
+    config.addLabel('given-names', 'Given Names')
     config.addLabel('inventors', 'Inventors')
     config.addLabel('isbn', 'ISBN')
     config.addLabel('issue', 'Issue')
+    config.addLabel('issue-title', 'Issue Title')
     config.addLabel('lpage', 'Last Page')
     config.addLabel('month', 'Month')
+    config.addLabel('name', 'Name')
     config.addLabel('pageCount', 'Page Count')
     config.addLabel('pageRange', 'Page Range')
     config.addLabel('patentCountry', 'Patent Country')
@@ -127,21 +138,17 @@ export default {
     config.addLabel('suffix', 'Suffix')
     config.addLabel('bio', 'Biography')
     config.addLabel('affiliations', 'Affiliations')
-    config.addLabel('awards', 'Awards')
+    config.addLabel('funders', 'Funders')
     config.addLabel('group', 'Group')
     config.addLabel('equalContrib', 'Equal Contribution')
     config.addLabel('corresp', 'Corresponding Author')
     config.addLabel('deceased', 'Deceased')
 
-    // organisation labels
-    config.addLabel('organisation', 'Affiliation')
-    config.addLabel('add-organisation', 'Add Organisation')
-    config.addLabel('edit-organisation', 'Edit Organisation')
-    config.addLabel('create-organisation', 'Create Organisation')
-    config.addLabel('name', 'Name')
+    // affiliation labels
+    config.addLabel('affiliation', 'Affiliation')
     config.addLabel('division1', 'Division 1 (Department)')
     config.addLabel('division2', 'Division 2')
-    config.addLabel('division3', 'Division 2')
+    config.addLabel('division3', 'Division 3')
     config.addLabel('street', 'Address Line 1 (Street)')
     config.addLabel('addressComplements', 'Address Line 2 (Complements)')
     config.addLabel('city', 'City')
@@ -156,8 +163,8 @@ export default {
     config.addLabel('edit-members', 'Edit Members')
 
     // award labels
-    config.addLabel('award', 'Award')
-    config.addLabel('institution', 'Institution Name')
+    config.addLabel('funder', 'Funder')
+    config.addLabel('institution', 'Institution')
     config.addLabel('fundRefId', 'Institution Identifier')
     config.addLabel('awardId', 'Award Identifier')
 
@@ -172,12 +179,15 @@ export default {
     // figure labels
     config.addLabel('figure', 'Figure')
     config.addLabel('content', 'Content')
-    config.addLabel('caption', 'Caption')
+    config.addLabel('legend', 'Legend')
     config.addLabel('copyrightStatement', 'Copyright Statement')
     config.addLabel('copyrightYear', 'Copyright Year')
     config.addLabel('copyrightHolder', 'Copyright Holder')
     config.addLabel('license', 'License')
     config.addLabel('licenseText', 'License Text (optional)')
+
+    // table figure labels
+    config.addLabel('table-figure', 'Table')
 
     // translatable labels
     config.addLabel('translatable', 'Translation')

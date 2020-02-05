@@ -1,33 +1,25 @@
-import { array2table } from 'substance'
-import { XREF_TARGET_TYPES } from './xrefHelpers'
 import { getPos } from './nodeHelpers'
 
 export default class AbstractCitationManager {
-  constructor (documentSession, type, labelGenerator) {
-    this.documentSession = documentSession
-    this.type = type
+  constructor (editorSession, refType, targetTypes, labelGenerator) {
+    this.editorSession = editorSession
+    this.refType = refType
+    this.targetTypes = new Set(targetTypes)
     this.labelGenerator = labelGenerator
-    this._targetTypes = array2table(XREF_TARGET_TYPES[type])
 
-    documentSession.on('change', this._onDocumentChange, this)
+    editorSession.on('change', this._onDocumentChange, this)
   }
 
   dispose () {
-    this.documentSession.off(this)
+    this.editorSession.off(this)
   }
 
   hasCitables () {
-    // TODO: we should assimilate 'ContainerNode' and 'XMLElementNode' interface
-    // I.e. an XMLElementNode could per se act as a classical container node
-    // ATM only XMLContainerNode has this interface
-    return this._getCollectionElement().getChildCount() > 0
+    return this.getCitables().length > 0
   }
 
   getCitables () {
-    // TODO: we should assimilate 'ContainerNode' and 'XMLElementNode' interface
-    // I.e. an XMLElementNode could per se act as a classical container node
-    // ATM only XMLContainerNode has this interface
-    return this._getCollectionElement().getChildren()
+    return []
   }
 
   getSortedCitables () {
@@ -41,57 +33,42 @@ export default class AbstractCitationManager {
     // HACK: do not react on node state updates
     if (change.info.action === 'node-state-update') return
 
-    const doc = this._getDocument()
-
-    // updateCitationLabels whenever
-    // I.   an xref[ref-type='bibr'] is created or deleted
-    // II.  the ref-type attribute of an xref is set to 'bibr' (creation)
-    // II. the rid attribute of an xref with ref-type bibr is updated
     const ops = change.ops
-    let needsUpdate = false
     for (var i = 0; i < ops.length; i++) {
       let op = ops[i]
-
-      switch (op.type) {
-        // I. citation is created or deleted
-        case 'delete':
-        case 'create': {
-          if (op.val.type === 'xref' && op.val.attributes && op.val.attributes['ref-type'] === this.type) {
-            needsUpdate = true
-          }
-          if (op.val.type === 'ref') {
-            needsUpdate = true
-          }
-          if (op.val.type === 'fn') {
-            needsUpdate = true
-          }
-          break
-        }
-        case 'set': {
-          if (op.path[1] === 'attributes') {
-            // II. citation has been created, i.e. ref-type has been set to 'bibr' (or vice versa)
-            if (op.path[2] === 'ref-type' && (op.val === this.type || op.original === this.type)) {
-              needsUpdate = true
-
-            // III. the references of a citation have been updated
-            } else if (op.path[2] === 'rid') {
-              let node = doc.get(op.path[0])
-              if (node && node.getAttribute('ref-type') === this.type) {
-                needsUpdate = true
-              }
-            }
-          }
-
-          break
-        }
-        default:
-          //
+      if (op.isNOP()) continue
+      // 1. xref has been added or removed
+      // 2. citable has been add or removed
+      if (this._detectAddRemoveXref(op) || this._detectAddRemoveCitable(op, change)) {
+        return this._updateLabels()
+      // 3. xref targets have been changed
+      // 4. refType of an xref has been changed (TODO: do we really need this?)
+      } else if (this._detectChangeRefTarget(op) || this._detectChangeRefType(op)) {
+        return this._updateLabels()
       }
-      if (needsUpdate) break
     }
-    if (needsUpdate) {
-      this._updateLabels()
+  }
+
+  _detectAddRemoveXref (op) {
+    return (op.val && op.val.type === 'xref' && op.val.refType === this.refType)
+  }
+
+  _detectAddRemoveCitable (op, change) {
+    return (op.val && this.targetTypes.has(op.val.type))
+  }
+
+  _detectChangeRefTarget (op) {
+    if (op.path[1] === 'refTargets') {
+      let doc = this._getDocument()
+      let node = doc.get(op.path[0])
+      return (node && node.refType === this.refType)
+    } else {
+      return false
     }
+  }
+
+  _detectChangeRefType (op) {
+    return (op.path[1] === 'refType' && (op.val === this.refType || op.original === this.refType))
   }
 
   /*
@@ -113,7 +90,6 @@ export default class AbstractCitationManager {
   _updateLabels (silent) {
     let xrefs = this._getXrefs()
     let refs = this.getCitables()
-    let bibEl = this._getCollectionElement()
     let refsById = refs.reduce((m, ref) => {
       m[ref.id] = ref
       return m
@@ -128,12 +104,8 @@ export default class AbstractCitationManager {
     xrefs.forEach((xref) => {
       let isInvalid = false
       let numbers = []
-      let rids = xref.getAttribute('rid') || ''
-      rids = rids.split(' ')
-      for (let i = 0; i < rids.length; i++) {
-        const id = rids[i]
-        // skip if id empty
-        if (!id) continue
+      let targetIds = xref.refTargets
+      for (let id of targetIds) {
         // fail if there is an unknown id
         if (!refsById[id]) {
           isInvalid = true
@@ -150,7 +122,7 @@ export default class AbstractCitationManager {
       if (isInvalid) {
         // HACK: we just signal invalid references with a ?
         numbers.push('?')
-        console.warn('invalid label detected for ', xref.toXML().getNativeElement())
+        console.warn(`invalid label detected for ${xref.id}`)
       }
       xrefLabels[xref.id] = this.labelGenerator.getLabel(numbers)
     })
@@ -174,37 +146,23 @@ export default class AbstractCitationManager {
       stateUpdates.push([ref.id, state])
     })
 
-    // HACK
-    // TODO: solve this properly
-    // e.g. we could implement this manager as a reducer on the application
-    // state, and let the bibliography component react to updates of that
-    if (bibEl) {
-      // Note: mimicking a state update on the bibliography element itself
-      // so that it rerenders, e.g. because the order might have changed
-      stateUpdates.push([bibEl.id, {}])
-    }
+    // FIXME: here we also made the 'collection' dirty originally
 
-    this.documentSession.updateNodeStates(stateUpdates, silent)
+    this.editorSession.updateNodeStates(stateUpdates, { silent })
   }
 
   _getDocument () {
-    return this.documentSession.getDocument()
+    return this.editorSession.getDocument()
   }
 
   _getXrefs () {
-    const content = this._getContentElement()
-    let refs = content.findAll(`xref[ref-type='${this.type}']`)
+    // TODO: is it really a good idea to tie this implementation to 'article' here?
+    const article = this._getDocument().get('article')
+    let refs = article.findAll(`xref[refType='${this.refType}']`)
     return refs
   }
 
-  _getContentElement () {
-    // TODO: we should generalize this and/or move it into ArticelAPI
-    // so that this code gets independent of the overall document layout
-    const doc = this._getDocument()
-    return doc.get('content')
-  }
-
-  _getCollectionElement () {
-    throw new Error('This method is abstract.')
+  _getLabelGenerator () {
+    return this.labelGenerator
   }
 }

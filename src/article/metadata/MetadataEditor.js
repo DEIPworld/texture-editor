@@ -1,45 +1,42 @@
-import { DefaultDOMElement } from 'substance'
-import { Managed } from '../../kit'
-import EditorPanel from '../shared/EditorPanel'
-import MetadataModel from '../models/MetadataModel'
+import { Component, DefaultDOMElement } from 'substance'
+import { Managed, OverlayCanvas } from '../../kit'
+import MetadataModel from './MetadataModel'
 import MetadataSection from './MetadataSection'
 import MetadataSectionTOCEntry from './MetadataSectionTOCEntry'
 import ExperimentalArticleValidator from '../ExperimentalArticleValidator'
 
-export default class MetadataEditor extends EditorPanel {
+export default class MetadataEditor extends Component {
+  constructor (...args) {
+    super(...args)
+
+    this._initialize(this.props)
+  }
+
   _initialize (props) {
-    super._initialize(props)
+    this.articleValidator = new ExperimentalArticleValidator(this.context.api)
+    this.model = new MetadataModel(this.context.editorSession)
 
-    this.articleValidator = new ExperimentalArticleValidator(this.editorSession, this.editorSession.editorState)
-    this.model = new MetadataModel(this.api)
-
-    // ATTENTION/HACK: this is making all properties dirty, so we have to reset the appState after that
+    // HACK: this is making all properties dirty, so we have to reset the appState after that
     this.articleValidator.initialize()
-    this.appState._reset()
+    this.context.editorState._reset()
+  }
+
+  getActionHandlers () {
+    return {
+      'acquireOverlay': this._acquireOverlay,
+      'releaseOverlay': this._releaseOverlay
+    }
   }
 
   didMount () {
-    super.didMount()
     this._showHideTOC()
-    this._restoreViewport()
     DefaultDOMElement.getBrowserWindow().on('resize', this._showHideTOC, this)
-  }
-
-  didUpdate () {
-    super.didUpdate()
-    this._restoreViewport()
+    this.context.editorSession.setRootComponent(this._getContentPanel())
   }
 
   dispose () {
-    super.dispose()
     this.articleValidator.dispose()
     DefaultDOMElement.getBrowserWindow().off(this)
-  }
-
-  getViewport () {
-    return {
-      x: this.refs.contentPanel.getScrollPosition()
-    }
   }
 
   render ($$) {
@@ -52,109 +49,143 @@ export default class MetadataEditor extends EditorPanel {
   }
 
   _renderMainSection ($$) {
-    const appState = this.context.appState
     let mainSection = $$('div').addClass('se-main-section')
     mainSection.append(
       this._renderToolbar($$),
       $$('div').addClass('se-content-section').append(
         this._renderTOCPane($$),
         this._renderContentPanel($$)
-      ).ref('contentSection'),
-      this._renderFooterPane($$)
+      // TODO: do we need this ref?
+      ).ref('contentSection')
     )
-    if (appState.workflowId) {
-      let Modal = this.getComponent('modal')
-      let WorkflowComponent = this.getComponent(appState.workflowId)
-      let workflowModal = $$(Modal, {
-        width: 'large'
-      }).addClass('se-workflow-modal').append(
-        $$(WorkflowComponent).ref('workflow')
-      )
-      mainSection.append(workflowModal)
-    }
     return mainSection
   }
 
   _renderToolbar ($$) {
     const Toolbar = this.getComponent('toolbar')
-    let config = this.props.config
+    let config = this.context.config
+    const items = config.getToolPanel('toolbar')
     return $$('div').addClass('se-toolbar-wrapper').append(
       $$(Managed(Toolbar), {
-        toolPanel: config.getToolPanel('toolbar'),
+        items,
         bindings: ['commandStates']
       }).ref('toolbar')
     )
   }
 
   _renderTOCPane ($$) {
-    const model = this.model
-    const properties = model.getProperties()
-
+    const sections = this.model.getSections()
     let el = $$('div').addClass('se-toc-pane').ref('tocPane')
     let tocEl = $$('div').addClass('se-toc')
-
-    properties.forEach(property => {
-      let valueModel = property.valueModel
-      let id = valueModel.id || property.type
+    sections.forEach(({ name, model }) => {
+      let id = model.id
       tocEl.append(
         $$(MetadataSectionTOCEntry, {
           id,
-          name: property.name,
-          model: valueModel
+          name,
+          model
         })
       )
     })
-
     el.append(tocEl)
     return el
   }
 
   _renderContentPanel ($$) {
-    const model = this.model
-    const properties = model.getProperties()
+    const sections = this.model.getSections()
     const ScrollPane = this.getComponent('scroll-pane')
 
     let contentPanel = $$(ScrollPane, {
+      contextMenu: 'custom',
       scrollbarPosition: 'right'
+    // NOTE: this ref is needed to access the root element of the editable content
     }).ref('contentPanel')
 
     let sectionsEl = $$('div').addClass('se-sections')
 
-    properties.forEach(property => {
-      let valueModel = property.valueModel
-      let id = valueModel.id || property.type
-      let content = $$(MetadataSection, { model: valueModel }).attr({id}).ref(property.name)
+    sections.forEach(({ name, model }) => {
+      let content = $$(MetadataSection, { name, model }).ref(name)
       sectionsEl.append(content)
     })
 
-    contentPanel.append(sectionsEl)
+    contentPanel.append(
+      sectionsEl.ref('sections'),
+      this._renderMainOverlay($$),
+      this._renderContextMenu($$)
+    )
 
     return contentPanel
   }
 
-  _renderFooterPane ($$) {
-    const FindAndReplaceDialog = this.getComponent('find-and-replace-dialog')
-    let el = $$('div').addClass('se-footer-pane')
-    el.append(
-      $$(FindAndReplaceDialog, {
-        theme: this._getTheme(),
-        viewName: 'metadata'
-      }).ref('findAndReplace')
-    )
-    return el
+  _renderMainOverlay ($$) {
+    const panelProvider = () => this.refs.contentPanel
+    return $$(OverlayCanvas, {
+      panelProvider,
+      theme: this._getTheme()
+    }).ref('overlay')
+  }
+
+  _renderContextMenu ($$) {
+    const config = this.context.config
+    const ContextMenu = this.getComponent('context-menu')
+    const items = config.getToolPanel('context-menu')
+    return $$(Managed(ContextMenu), {
+      items,
+      theme: this._getTheme(),
+      bindings: ['commandStates']
+    })
   }
 
   _getContentPanel () {
     return this.refs.contentPanel
   }
 
+  _getTheme () {
+    return 'dark'
+  }
+
+  _onKeydown (e) {
+    let handled = this.context.keyboardManager.onKeydown(e, this.context)
+    if (handled) {
+      e.stopPropagation()
+      e.preventDefault()
+    }
+    return handled
+  }
+
+  _scrollElementIntoView (el, force) {
+    this._getContentPanel().scrollElementIntoView(el, !force)
+  }
+
+  _scrollTo (params) {
+    let selector
+    if (params.nodeId) {
+      selector = `[data-id="${params.nodeId}"]`
+    } else if (params.section) {
+      selector = `[data-section="${params.section}"]`
+    } else {
+      throw new Error('Illegal argument')
+    }
+    let comp = this.refs.contentPanel.find(selector)
+    if (comp) {
+      this._scrollElementIntoView(comp.el, true)
+    }
+  }
+
   _showHideTOC () {
     let contentSectionWidth = this.refs.contentSection.el.width
-    let threshold = this.props.deip ? this.props.deip.tocThreshold : 960;
-    if (contentSectionWidth < threshold) {
+    if (contentSectionWidth < 960) {
       this.el.addClass('sm-compact')
     } else {
       this.el.removeClass('sm-compact')
     }
+  }
+
+  _acquireOverlay (...args) {
+    this.refs.overlay.acquireOverlay(...args)
+  }
+
+  _releaseOverlay (...args) {
+    this.refs.overlay.releaseOverlay(...args)
   }
 }

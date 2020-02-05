@@ -1,9 +1,16 @@
-/* global FileReader, Buffer */
+/* global Buffer */
+import { platform } from 'substance'
 import readArchive from './readArchive'
 import writeArchive from './writeArchive'
 import cloneArchive from './cloneArchive'
+import _require from './_require'
 
-const path = require('path')
+// FIXME: this file should only get bundled in commonjs version
+let fs, path
+if (platform.inNodeJS || platform.inElectron) {
+  fs = _require('fs')
+  path = _require('path')
+}
 
 /*
   A storage client optimised for Desktop clients
@@ -12,7 +19,12 @@ const path = require('path')
   folders.
 */
 export default class FSStorage {
+  constructor (rootDir) {
+    this._rootDir = rootDir
+  }
+
   read (archiveDir, cb) {
+    archiveDir = this._normalizeArchiveDir(archiveDir)
     readArchive(archiveDir, { noBinaryContent: true, ignoreDotFiles: true })
       .then(rawArchive => {
         // Turn binaries into urls
@@ -30,6 +42,7 @@ export default class FSStorage {
   }
 
   write (archiveDir, rawArchive, cb) {
+    archiveDir = this._normalizeArchiveDir(archiveDir)
     _convertBlobs(rawArchive)
       .then(() => {
         return writeArchive(archiveDir, rawArchive)
@@ -41,12 +54,21 @@ export default class FSStorage {
   }
 
   clone (archiveDir, newArchiveDir, cb) {
+    archiveDir = this._normalizeArchiveDir(archiveDir)
+    newArchiveDir = this._normalizeArchiveDir(newArchiveDir)
     cloneArchive(archiveDir, newArchiveDir)
       .then(success => {
         if (success) cb()
         else cb(new Error('Could not clone archive'))
       })
       .catch(cb)
+  }
+
+  _normalizeArchiveDir (archiveDir) {
+    if (this._rootDir) {
+      archiveDir = path.join(this._rootDir, archiveDir)
+    }
+    return archiveDir
   }
 }
 
@@ -65,14 +87,11 @@ async function _convertBlobs (rawArchive) {
 }
 
 function _blobToArrayBuffer (blob) {
-  return new Promise(resolve => {
-    let reader = new FileReader()
-    reader.onload = function () {
-      if (reader.readyState === 2) {
-        var buffer = Buffer.from(reader.result)
-        resolve(buffer)
-      }
-    }
-    reader.readAsArrayBuffer(blob)
+  return new Promise((resolve, reject) => {
+    // TODO: is there other way to get buffer out of Blob without browser APIs?
+    fs.readFile(blob.path, (err, buffer) => {
+      if (err) return reject(err)
+      resolve(buffer)
+    })
   })
 }
