@@ -62,7 +62,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/DEIP/texture.git#965277641390a44995fcc2cb65ea1e1e77d45fcb"
+    "url": "https://gitlab.com/DEIP/texture.git"
   },
   "license": "MIT",
   "files": [
