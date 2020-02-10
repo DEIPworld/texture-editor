@@ -1,6 +1,6 @@
 {
   "name": "@deip/substance-texture",
-  "version": "1.0.0-ce11d6c0d2ce9ba868458c50d3a22477f6ad36d0.patch.1",
+  "version": "1.0.0-ce11d6c0d2ce9ba868458c50d3a22477f6ad36d0.patch.2",
   "author": {
     "name": "DEIP fork of Substance",
     "email": "yahor.tsaryk@deip.world"
@@ -15,6 +15,7 @@
     "fs-extra": "7.0.1",
     "katex": "0.10.0",
     "parse-formdata": "1.0.2",
+    "substance": "^1.1.0-preview.27",
     "texture-xml-utils": "0.2.1",
     "yauzl": "2.10.0",
     "yazl": "2.5.1"
