@@ -10,7 +10,7 @@ export default class HttpStorageClient {
   /*
     @returns a Promise for a raw archive, i.e. the data for a DocumentArchive.
   */
-  read (archiveId, cb) {
+  read(archiveId, cb) {
     let url = this.apiUrl
     let header = this.headers
     if (archiveId) {
@@ -27,7 +27,7 @@ export default class HttpStorageClient {
     })
   }
 
-  write (archiveId, data, cb) {
+  write(archiveId, data, cb) {
     let form = new FormData()
     forEach(data.resources, (record, filePath) => {
       if (record.encoding === 'blob') {
