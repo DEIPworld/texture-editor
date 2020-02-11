@@ -19,14 +19,9 @@ import ArticleHTMLImporter from './converter/html/ArticleHTMLImporter'
 import ArticleJATSConverters from './converter/jats/ArticleJATSConverters'
 import ArticleJATSExporter from './converter/jats/ArticleJATSExporter'
 import ArticleJATSImporter from './converter/jats/ArticleJATSImporter'
+import ArticlePlainTextExporter from './converter/text/ArticlePlainTextExporter'
 import JATSTransformer from './converter/transform/jats/JATSTransformer'
 import DefaultArticleEditor from './components/DefaultArticleEditor'
-import FigureManager from './shared/FigureManager'
-import FootnoteManager from './shared/FootnoteManager'
-import ReferenceManager from './shared/ReferenceManager'
-import EquationManager from './shared/EquationManager'
-import FileManager from './shared/FileManager'
-import TableManager from './shared/TableManager'
 
 export default {
   name: 'article',
@@ -84,6 +79,8 @@ export default {
     articleConfig.addImporter('html', ArticleHTMLImporter)
     articleConfig.addExporter('html', ArticleHTMLExporter)
 
+    articleConfig.addExporter('text', ArticlePlainTextExporter)
+
     // ATTENTION: FigureLabelGenerator works a bit differently
     // TODO: consolidate LabelGenerators and configuration
     // e.g. it does not make sense to say 'setLabelGenerator' but then only provide a configuration for 'NumberedLabelGenerator'
@@ -98,7 +95,7 @@ export default {
       and: ',',
       to: '-'
     }))
-    articleConfig.setValue('equation-label-generator', new NumberedLabelGenerator({
+    articleConfig.setValue('formula-label-generator', new NumberedLabelGenerator({
       template: '($)',
       and: ',',
       to: '-'
@@ -108,7 +105,7 @@ export default {
       and: ',',
       to: '-'
     }))
-    articleConfig.setValue('file-label-generator', new NumberedLabelGenerator({
+    articleConfig.setValue('supplementary-file-label-generator', new NumberedLabelGenerator({
       name: 'Supplementary File',
       plural: 'Supplementary Files',
       and: ',',
@@ -125,13 +122,6 @@ export default {
     // TODO: document how a plugin can override this, for a specific article type
     articleConfig.addComponent('article-editor', DefaultArticleEditor)
     articleConfig.import(ManuscriptPackage)
-
-    articleConfig.addService('figure-manager', FigureManager.create)
-    articleConfig.addService('footnote-manager', FootnoteManager.create)
-    articleConfig.addService('equation-manager', EquationManager.create)
-    articleConfig.addService('reference-manager', ReferenceManager.create)
-    articleConfig.addService('file-manager', FileManager.create)
-    articleConfig.addService('table-manager', TableManager.create)
 
     articleConfig.import(MetadataPackage)
   }

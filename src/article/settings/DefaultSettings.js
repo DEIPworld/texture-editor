@@ -14,6 +14,7 @@ export default {
   'data-publication-ref.authors': { required: true },
   'data-publication-ref.containerTitle': { required: true },
   'data-publication-ref.title': { required: true },
+  'figure-panel.title': { required: true },
   'funder.institution': { required: true },
   'group.name': { required: true },
   'journal-article-ref.authors': { required: true },

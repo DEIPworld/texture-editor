@@ -13,8 +13,10 @@ const {
 const DEBUG = process.env.DEBUG
 
 const BLANK_DOCUMENT = path.join(__dirname, 'templates', 'blank.dar')
+const BLANK_FIGURE_PACKAGE = path.join(__dirname, 'templates', 'blank-figure-package.dar')
 const templates = {
-  'article': BLANK_DOCUMENT
+  'article': BLANK_DOCUMENT,
+  'figure-package': BLANK_FIGURE_PACKAGE
 }
 
 let argv = process.argv
@@ -279,6 +281,12 @@ function _createMenu () {
               accelerator: 'CommandOrControl+N',
               click () {
                 _openNew('article')
+              }
+            },
+            {
+              label: 'Figure Package',
+              click () {
+                _openNew('figure-package')
               }
             }
           ]

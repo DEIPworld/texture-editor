@@ -11,9 +11,11 @@ import Break from './Break'
 import ChapterRef from './ChapterRef'
 import ConferencePaperRef from './ConferencePaperRef'
 import CustomAbstract from './CustomAbstract'
+import MetadataField from './MetadataField'
 import DataPublicationRef from './DataPublicationRef'
 import ExternalLink from './ExternalLink'
 import Figure from './Figure'
+import FigurePanel from './FigurePanel'
 import Footnote from './Footnote'
 import Funder from './Funder'
 import Graphic from './Graphic'
@@ -63,7 +65,7 @@ export default {
     ;[
       Abstract, Article, ArticleRef,
       BlockFormula, BlockQuote, Body, Bold, BookRef, Break, ChapterRef, ConferencePaperRef,
-      CustomAbstract, DataPublicationRef, ExternalLink, Figure,
+      CustomAbstract, MetadataField, DataPublicationRef, ExternalLink, Figure, FigurePanel,
       Footnote, Funder, Graphic, Group, Heading, InlineFormula, InlineGraphic, Italic,
       Keyword, JournalArticleRef, List, ListItem, MagazineArticleRef, Metadata, Monospace,
       NewspaperArticleRef, Affiliation, Overline, Paragraph, PatentRef, Permission,

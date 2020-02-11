@@ -1,4 +1,5 @@
 import { last, isArray } from 'substance'
+import { LATIN_LETTERS_UPPER_CASE } from '../ArticleConstants'
 
 export default class FigureLabelGenerator {
   constructor (config = {}) {
@@ -97,12 +98,23 @@ export default class FigureLabelGenerator {
       return String(def[0].pos)
     } else {
       let figCounter = def[0].pos
-      return `${figCounter}`
+      // TODO: we should think about some way to make this configurable
+      return `${figCounter}${this._getPanelLabel(def)}`
     }
   }
 
+  _getPanelLabel (def) {
+    let panelCounter = def[1].pos
+    return `${LATIN_LETTERS_UPPER_CASE[panelCounter - 1]}`
+  }
+
   _getGroupCounter (first, last) {
-    return `${this._getSingleCounter(first)}${this.config.to}${this._getSingleCounter(last)}`
+    // ATTENTION: assuming that first and last have the same level (according to our implementation)
+    if (first.length === 1) {
+      return `${this._getSingleCounter(first)}${this.config.to}${this._getSingleCounter(last)}`
+    } else {
+      return `${this._getSingleCounter(first)}${this.config.to}${this._getPanelLabel(last)}`
+    }
   }
 
   _replaceAll (t, $) {

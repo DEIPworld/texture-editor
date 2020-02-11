@@ -762,7 +762,10 @@ test('ManuscriptEditor: cut and pasting a figure', t => {
   let bodySurface = _getBodySurface(editor)
   loadBodyFixture(editor, TWO_FIGURES)
 
-  selectNode(editor, 'fig1')
+  // HACK: ATM, we are wrapping every fig into a fig-group internally, using a '_' as prefix for the id of the group
+  // TODO: we should rethink if this is really what we want. IMO there is no advantage in having an implicit conversion
+  // with respect to collaboration. Maybe it is better to treat FigureGroups as an extra thing.
+  selectNode(editor, '_fig-1')
   let pasteEvent = new DOMEvent({ clipboardData: new ClipboardEventData() })
   bodySurface._onCut(pasteEvent)
   setCursor(editor, 'empty.content', 0)

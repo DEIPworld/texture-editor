@@ -3,6 +3,8 @@ export {
   Clipboard
 } from 'substance'
 
+export { default as AbstractScrollPane } from './AbstractScrollPane'
+export { default as BodyScrollPane } from './BodyScrollPane'
 export { default as BooleanComponent } from './BooleanComponent'
 export { default as Button } from './Button'
 export { default as CheckboxInput } from './CheckboxInput'
@@ -12,7 +14,6 @@ export { default as ContextMenu } from './ContextMenu'
 export { default as DialogSectionComponent } from './DialogSectionComponent'
 export { default as EditableAnnotationComponent } from './EditableAnnotationComponent'
 export { default as EditableInlineNodeComponent } from './EditableInlineNodeComponent'
-export { default as FileSelect } from './FileSelect'
 export { default as FormRowComponent } from './FormRowComponent'
 export { default as getComponentForModel } from './getComponentForModel'
 export { default as HideIfEmpty } from './HideIfEmpty'

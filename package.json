@@ -1,6 +1,6 @@
 {
   "name": "@deip/substance-texture",
-  "version": "1.0.0-ce11d6c0d2ce9ba868458c50d3a22477f6ad36d0.patch.2",
+  "version": "1.0.0-9d8c0dc6a3ba961c42cd5b494857baf783025cf3.patch.1",
   "author": {
     "name": "DEIP fork of Substance",
     "email": "yahor.tsaryk@deip.world"
@@ -15,13 +15,13 @@
     "fs-extra": "7.0.1",
     "katex": "0.10.0",
     "parse-formdata": "1.0.2",
-    "substance": "^1.1.0-preview.27",
     "texture-xml-utils": "0.2.1",
     "yauzl": "2.10.0",
-    "yazl": "2.5.1"
+    "yazl": "2.5.1",
+    "substance": "1.1.0-preview.24"
   },
   "peerDependency": {
-    "substance": "^1.1.0-preview.27"
+    "substance": "1.1.0-preview.24"
   },
   "devDependencies": {
     "colors": "1.3.3",
@@ -40,7 +40,7 @@
     "rollup-plugin-node-resolve": "4.2.3",
     "source-map-support": "0.5.10",
     "standard": "12.0.1",
-    "substance": "1.1.0-preview.27",
+    "substance": "1.1.0-preview.24",
     "substance-bundler": "0.27.0",
     "substance-test": "0.14.0",
     "tap-spec": "5.0.0",

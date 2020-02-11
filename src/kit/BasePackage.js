@@ -1,8 +1,8 @@
 import {
-  AnnotationComponent, IsolatedInlineNodeComponent, TextPropertyComponent,
-  BodyScrollPane
+  AnnotationComponent, IsolatedInlineNodeComponent, TextPropertyComponent
 } from 'substance'
 
+import BodyScrollPane from './ui/BodyScrollPane'
 import Button from './ui/Button'
 import ContainerEditor from './ui/_ContainerEditor'
 import ContextMenu from './ui/ContextMenu'

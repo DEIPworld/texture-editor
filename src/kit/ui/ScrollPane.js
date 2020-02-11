@@ -1,6 +1,52 @@
-import { platform, getRelativeBoundingRect, $$, AbstractScrollPane } from 'substance'
+import { platform, getRelativeBoundingRect, $$ } from 'substance'
+import AbstractScrollPane from './AbstractScrollPane'
 
+/**
+  Wraps content in a scroll pane.
+
+  NOTE: It is best practice to put all overlays as direct childs of the ScrollPane
+        to reduce the chance that positioning gets messed up (position: relative)
+
+  @prop {String} scrollbarType 'native' or 'substance' for a more advanced visual scrollbar. Defaults to 'native'
+  @prop {String} [scrollbarPosition] 'left' or 'right' only relevant when scrollBarType: 'substance'. Defaults to 'right'
+  @prop {ui/Highlights} [highlights] object that maintains highlights and can be manipulated from different sources
+
+  @example
+
+  ```js
+  $$(ScrollPane, {
+    scrollbarType: 'substance', // defaults to native
+    scrollbarPosition: 'left', // defaults to right
+    onScroll: this.onScroll.bind(this),
+    highlights: this.contentHighlights,
+  })
+  ```
+*/
 export default class ScrollPane extends AbstractScrollPane {
+  didMount () {
+    super.didMount()
+
+    if (this.refs.scrollbar) {
+      if (platform.inBrowser) {
+        this.domObserver = new window.MutationObserver(this._onContentChanged.bind(this))
+        this.domObserver.observe(this.el.getNativeElement(), {
+          subtree: true,
+          attributes: true,
+          characterData: true,
+          childList: true
+        })
+      }
+    }
+  }
+
+  dispose () {
+    super.dispose()
+
+    if (this.domObserver) {
+      this.domObserver.disconnect()
+    }
+  }
+
   render () {
     let el = $$('div')
       .addClass('sc-scroll-pane')
@@ -26,7 +72,29 @@ export default class ScrollPane extends AbstractScrollPane {
   renderContent () {
     let contentEl = $$('div').ref('content').addClass('se-content')
     contentEl.append(this.props.children)
+    if (this.props.contextMenu === 'custom') {
+      contentEl.on('contextmenu', this._onContextMenu)
+    }
     return contentEl
+  }
+
+  _onContentChanged () {
+    this._contentChanged = true
+  }
+
+  _afterRender () {
+    super._afterRender()
+
+    if (this.refs.scrollbar && this._contentChanged) {
+      this._contentChanged = false
+      this._updateScrollbar()
+    }
+  }
+
+  _updateScrollbar () {
+    if (this.refs.scrollbar) {
+      this.refs.scrollbar.updatePositions()
+    }
   }
 
   onScroll () {
@@ -125,5 +193,15 @@ export default class ScrollPane extends AbstractScrollPane {
     if (shouldScroll) {
       this.setScrollPosition(offset)
     }
+  }
+
+  _onResize (...args) {
+    super._onResize(...args)
+    this._updateScrollbar()
+  }
+
+  _onContextMenu (e) {
+    super._onContextMenu(e)
+    this._updateScrollbar()
   }
 }

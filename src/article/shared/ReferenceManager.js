@@ -9,11 +9,6 @@ export default class ReferenceManager extends AbstractCitationManager {
     this._updateLabels('initial')
   }
 
-  static create (context) {
-    const { editorSession, config } = context
-    return new ReferenceManager(editorSession, config.getValue('reference-label-generator'))
-  }
-
   getBibliography () {
     return this.getSortedCitables()
   }
