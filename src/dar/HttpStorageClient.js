@@ -1,5 +1,8 @@
 /* global FormData */
 import { sendRequest, forEach } from 'substance'
+import { UpdateDraftCmd } from '@deip/command-models';
+import { JsonDataMsg } from '@deip/message-models';
+import axios from 'axios'
 
 export default class HttpStorageClient {
   constructor(apiUrl, defaultHeaders) {
@@ -36,18 +39,26 @@ export default class HttpStorageClient {
         delete record.data
       }
     })
+
     form.append('_archive', JSON.stringify(data))
-    let url = this.apiUrl
-    let header = this.headers
-    if (archiveId) {
-      url = url + '/' + archiveId
-    }
-    return sendRequest({
-      method: 'PUT',
-      url,
-      header,
-      data: form
-    }).then(response => {
+
+    const updateDraftCmd = new UpdateDraftCmd({
+      _id: archiveId,
+      xmlDraft: data
+    });
+
+    const msg = new JsonDataMsg({ appCmds: [updateDraftCmd] }, { 'entity-id': archiveId });
+
+    return axios.put(
+      this.apiUrl,
+      msg.getHttpBody(),
+      {
+        headers: {
+          ...this.headers,
+          ...msg.getHttpHeaders()
+        }
+      }
+    ).then(response => {
       cb(null, response)
     }).catch(err => {
       cb(err)
