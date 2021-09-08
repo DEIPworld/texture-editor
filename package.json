@@ -18,7 +18,11 @@
     "texture-xml-utils": "0.2.1",
     "yauzl": "2.10.0",
     "yazl": "2.5.1",
-    "substance": "1.1.0-preview.24"
+    "substance": "1.1.0-preview.24",
+    "axios": "^0.21.1",
+    "@deip/command-models": "1.336.0",
+    "@deip/constants": "1.336.0",
+    "@deip/message-models": "1.336.0"
   },
   "peerDependency": {
     "substance": "1.1.0-preview.24"
