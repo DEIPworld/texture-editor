@@ -5,6 +5,8 @@ const path = require('path')
 const fork = require('substance-bundler/extensions/fork')
 const vfs = require('substance-bundler/extensions/vfs')
 const rollup = require('substance-bundler/extensions/rollup')
+const json = require('rollup-plugin-json');
+const babel = require('@rollup/plugin-babel').babel;
 const postcss = require('substance-bundler/extensions/postcss')
 const yazl = require('yazl')
 const compileSchema = require('texture-xml-utils/bundler/compileSchema')
@@ -12,6 +14,9 @@ const generateSchemaDocumentation = require('texture-xml-utils/bundler/generateS
 const commonjs = require('rollup-plugin-commonjs')
 const nodeResolve = require('rollup-plugin-node-resolve')
 const istanbul = require('substance-bundler/extensions/rollup/rollup-plugin-istanbul')
+
+const lodash = require('lodash');
+const lodashFp = require('lodash/fp.js');
 
 let _require = require('esm')(module)
 const serve = _require('./src/dar-server/serve').default
@@ -368,9 +373,27 @@ function _buildLib (DEST, platform) {
   const external = ['substance', 'katex', 'vfs']
   const plugins = [
     nodeResolve(),
+    babel({
+      filter: function (filepath) {
+        return filepath.includes("node_modules/@deip") && !filepath.includes("@deip/lib-crypto");
+      },
+      presets: ['@babel/preset-env'],
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { legacy: true }],
+        ['@babel/plugin-proposal-class-properties', { loose: true }],
+        ['@babel/plugin-proposal-object-rest-spread'],
+        ['@babel/plugin-proposal-optional-chaining'],
+        ['@babel/plugin-proposal-private-methods', { loose: true }]
+      ],
+    }),
     commonjs({
-      include: 'node_modules/**'
-    })
+      include: 'node_modules/**',
+      namedExports: {
+        'lodash': Object.keys(lodash),
+        'lodash/fp': Object.keys(lodashFp)
+      }
+    }),
+    json()
   ]
   let output = []
   if (platform === 'browser' || platform === 'all') {
