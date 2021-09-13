@@ -386,6 +386,7 @@ function _buildLib (DEST, platform) {
         ['@babel/plugin-proposal-private-methods', { loose: true }]
       ],
     }),
+    // TODO: Replace 'require('./../serialization');' with 'require('@deip/command-models')' in dist/texture.js
     commonjs({
       include: 'node_modules/**',
       namedExports: {
