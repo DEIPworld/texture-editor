@@ -1,7 +1,7 @@
 /* global FormData */
 import { sendRequest, forEach } from 'substance'
 import { UpdateDraftCmd } from '@deip/command-models';
-import { JsonDataMsg } from '@deip/message-models';
+import { MultFormDataMsg } from '@deip/message-models';
 import axios from 'axios'
 
 export default class HttpStorageClient {
@@ -47,7 +47,7 @@ export default class HttpStorageClient {
       xmlDraft: data
     });
 
-    const msg = new JsonDataMsg({ appCmds: [updateDraftCmd] }, { 'entity-id': archiveId });
+    const msg = new MultFormDataMsg(new FormData(), { appCmds: [updateDraftCmd] }, { 'entity-id': archiveId });
 
     return axios.put(
       this.apiUrl,
